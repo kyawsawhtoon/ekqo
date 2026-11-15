@@ -1,0 +1,6 @@
+schema: ekqo.edition-quest/1
+edition: my
+quest: q09
+say: [color.red, color.blue, color.yellow, color.green, size.big, size.small]
+hear: [color.white, color.black, nature.flower, nature.tree, toy.kite, play.swing]
+lines: {}        # TODO: Burmese lines for this quest's line and say/use steps (drafted offline, native-speaker reviewed)

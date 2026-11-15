@@ -1,0 +1,7 @@
+schema: ekqo.edition-quest/1
+edition: my
+quest: q12
+say: [expr.beautiful]
+say_review: all     # Q12 reviews every earlier quest
+hear: [thing.bridge, phrase.go_home, time.soon, thing.promise, phrase.come_back]
+lines: {}        # TODO: Burmese lines for this quest's line and say/use steps (drafted offline, native-speaker reviewed)

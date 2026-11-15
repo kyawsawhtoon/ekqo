@@ -1,0 +1,26 @@
+# Q10. The Market. Storyboard 10.4.
+schema: ekqo.quest/1
+id: q10
+chapter: ch3
+title: "The Market"
+location: market
+characters: [ekqo, grandma, fruit_seller, veg_seller]
+function: "Naming fruits; numbers 6-10; asking the price"
+topics: [fruit.banana, fruit.apple, fruit.mango, fruit.orange, fruit.grapes, num.6, num.7, num.8, num.9, num.10, q.how_much, phrase.ill_buy, place.market]
+patterns: [pat.how_much, pat.please_give_n]
+listening_weight: normal
+reuses: [q02, q07, q08]
+discoveries: [ekqo.memory_home]
+rewards: [fruit_basket]
+steps:
+  - { id: to_market,    type: scene, meaning: "Grandma takes them to the market to buy fruit." }
+  - { id: teach_fruit,  type: teach, concepts: [fruit.banana, fruit.apple, fruit.mango, fruit.orange, q.how_much, phrase.ill_buy], patterns: [pat.how_much] }
+  - { id: ask_fruit,    type: use, speaker: fruit_seller, repeat: 2, meaning: "The child asks for fruit with a number.", expects: { intent: "asks for a fruit with a number", pattern: pat.please_give_n }, ai: { npc_vary: true, judge: meaning } }
+  - { id: ask_price,    type: use, speaker: fruit_seller, meaning: "The child asks the price.", expects: { intent: "asks how much", pattern: pat.how_much }, ai: { npc_vary: true, judge: meaning } }
+  - { id: seller_price, type: line, speaker: fruit_seller, meaning: "The seller says a price between six and ten.", concepts: [num.6, num.7, num.8, num.9, num.10] }
+  - { id: sky_fruit_memory, type: scene, meaning: "Ekqo finds a sour fruit, his favorite, and goes very quiet: it reminds him of a glowing fruit in the Cloud Meadow." }
+  - { id: ask_reminds,  type: say, speaker: ekqo, meaning: "The child asks Ekqo what the fruit reminds him of.", expects: { intent: "asks Ekqo about the fruit / his home", open: true }, ai: { npc_vary: true, judge: meaning } }
+  - { id: discover_memory, type: discover, discovery: ekqo.memory_home }
+  - { id: snack,        type: care, action: feed, meaning: "A shared fruit snack." }
+  - { id: review,       type: review }
+  - { id: reward,       type: reward, items: [fruit_basket], sparks: 2 }

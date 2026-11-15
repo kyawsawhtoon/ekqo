@@ -1,0 +1,28 @@
+# Q7. Grandma's List. Storyboard 10.3.
+schema: ekqo.quest/1
+id: q07
+chapter: ch2
+title: "Grandma's List"
+location: shop
+characters: [ekqo, shopkeeper, grandma]
+function: "Asking for things with numbers 1-5"
+topics: [num.1, num.2, num.3, num.4, num.5, q.how_many, phrase.please_give, food.rice_grain, food.egg, drink.milk, thing.soap, phrase.thats_all, phrase.thank_you, thing.money]
+patterns: [pat.please_give_n, pat.how_many_q]
+listening_weight: normal
+reuses: [q02, q03, q05, q06]
+discoveries: [ekqo.scared_cleaner]
+rewards: [shopping_bag]
+task:
+  kind: shopping_list
+  list: [{ thing: food.rice_grain, n: 1 }, { thing: food.egg, n: 5 }, { thing: drink.milk, n: 2 }]
+steps:
+  - { id: picture_list, type: scene, meaning: "Grandma gives the child a picture list for the corner shop." }
+  - { id: teach_numbers, type: teach, concepts: [num.1, num.2, num.3, num.4, num.5, phrase.please_give, phrase.thank_you], patterns: [pat.please_give_n] }
+  - { id: ask_items,    type: use, speaker: shopkeeper, repeat: 3, meaning: "The child asks for each item on the list with a number.", expects: { intent: "asks for a list item with the right number", pattern: pat.please_give_n, from_task: list }, ai: { npc_vary: true, judge: meaning } }
+  - { id: how_many,     type: say, speaker: shopkeeper, meaning: "The shopkeeper asks how many. The child answers.", expects: { intent: "says a number", any_of: ["prefix:num."] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: cleaner_hides, type: scene, meaning: "Ekqo gets scared of the shop's floor-cleaning machine and hides in the child's pocket." }
+  - { id: discover_cleaner, type: discover, discovery: ekqo.scared_cleaner }
+  - { id: thats_all,    type: say, speaker: shopkeeper, meaning: "The child says 'That's all, thank you'.", expects: { intent: "finishes and thanks politely", concepts: [phrase.thank_you] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: spark,        type: scene, meaning: "A spark of light is behind the counter." }
+  - { id: review,       type: review }
+  - { id: reward,       type: reward, items: [shopping_bag], sparks: 1 }

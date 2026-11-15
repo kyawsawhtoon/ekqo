@@ -1,0 +1,6 @@
+schema: ekqo.edition-quest/1
+edition: my
+quest: q04
+say: [family.mother, family.father, family.grandma, family.grandpa, phrase.how_are_you, phrase.im_fine, phrase.good_night]
+hear: [family.family, feel.sleepy, thing.bed, phrase.welcome]
+lines: {}        # TODO: Burmese lines for this quest's line and say/use steps (drafted offline, native-speaker reviewed)

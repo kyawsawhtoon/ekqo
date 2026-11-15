@@ -1,0 +1,6 @@
+schema: ekqo.edition-quest/1
+edition: my
+quest: q03
+say: [body.head, body.face, body.hands, body.feet, verb.wash, thing.soap]
+hear: [body.eyes, body.ears, body.tummy, thing.bubbles, thing.towel, state.dirty, state.clean]
+lines: {}        # TODO: Burmese lines for this quest's line and say/use steps (drafted offline, native-speaker reviewed)

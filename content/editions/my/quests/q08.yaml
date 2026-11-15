@@ -1,0 +1,6 @@
+schema: ekqo.edition-quest/1
+edition: my
+quest: q08
+say: [food.cake, ref.this_one, ref.that_one, phrase.ill_have, taste.sweet, temp.hot]
+hear: [food.cookie, q.what_would_you_like, texture.soft, smell.good, thing.song]
+lines: {}        # TODO: Burmese lines for this quest's line and say/use steps (drafted offline, native-speaker reviewed)

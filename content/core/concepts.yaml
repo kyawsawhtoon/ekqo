@@ -1,0 +1,192 @@
+# Concept registry: language-neutral meanings that every edition maps to words.
+# A concept id never changes once shipped (progress data refers to it).
+# `image` defaults to the concept id under assets/concepts/ when omitted.
+schema: ekqo.concepts/1
+
+concepts:
+  # Greetings and answers
+  - { id: greet.hello,        gloss: hello,                 kind: phrase }
+  - { id: greet.bye,          gloss: bye,                   kind: phrase }
+  - { id: ans.yes,            gloss: yes,                   kind: phrase }
+  - { id: ans.no,             gloss: no,                    kind: phrase }
+  - { id: word.name,          gloss: name,                  kind: noun }
+  - { id: q.who,              gloss: "who is it?",          kind: phrase }
+  - { id: phrase.dont_be_scared, gloss: "don't be scared",  kind: phrase }
+  - { id: phrase.how_are_you, gloss: "are you well?",       kind: phrase }
+  - { id: phrase.im_fine,     gloss: "I'm well",            kind: phrase }
+  - { id: phrase.good_night,  gloss: "good night / time to sleep", kind: phrase }
+  - { id: phrase.welcome,     gloss: welcome,               kind: phrase }
+  - { id: phrase.again,       gloss: again,                 kind: phrase }
+  - { id: phrase.turn,        gloss: "turn (my turn)",      kind: noun }
+  - { id: phrase.please_give, gloss: "please give",         kind: phrase }
+  - { id: phrase.thank_you,   gloss: "thank you",           kind: phrase }
+  - { id: phrase.thats_all,   gloss: "that's all",          kind: phrase }
+  - { id: phrase.ill_have,    gloss: "I'll have",           kind: phrase }
+  - { id: phrase.ill_buy,     gloss: "I'll buy",            kind: phrase }
+  - { id: phrase.go_home,     gloss: "go home",             kind: phrase }
+  - { id: phrase.come_back,   gloss: "come back",           kind: phrase }
+  - { id: q.how_many,         gloss: "how many?",           kind: phrase }
+  - { id: q.how_much,         gloss: "how much?",           kind: phrase }
+  - { id: q.what_would_you_like, gloss: "what would you like?", kind: phrase }
+  - { id: expr.beautiful,     gloss: "how beautiful!",      kind: phrase }
+
+  # Feelings and states
+  - { id: feel.hungry,  gloss: hungry,   kind: adjective }
+  - { id: feel.thirsty, gloss: thirsty,  kind: adjective }
+  - { id: feel.sleepy,  gloss: sleepy,   kind: adjective }
+  - { id: feel.happy,   gloss: "happy / fun", kind: adjective }
+  - { id: feel.sad,     gloss: sad,      kind: adjective }
+  - { id: feel.scared,  gloss: scared,   kind: adjective }
+  - { id: feel.tired,   gloss: tired,    kind: adjective }
+  - { id: feel.miss,    gloss: "miss (someone or something)", kind: verb }
+  - { id: state.dirty,  gloss: dirty,    kind: adjective }
+  - { id: state.clean,  gloss: "clean now", kind: adjective }
+
+  # Verbs
+  - { id: verb.eat,       gloss: eat,          kind: verb }
+  - { id: verb.drink,     gloss: drink,        kind: verb }
+  - { id: verb.wash,      gloss: wash,         kind: verb }
+  - { id: verb.play,      gloss: play,         kind: verb }
+  - { id: verb.run,       gloss: run,          kind: verb }
+  - { id: verb.jump,      gloss: jump,         kind: verb }
+  - { id: verb.hide,      gloss: hide,         kind: verb }
+  - { id: verb.find,      gloss: "look for / find", kind: verb }
+  - { id: verb.like,      gloss: like,         kind: verb }
+  - { id: verb.dont_like, gloss: "don't like", kind: verb }
+
+  # Food, drink and taste
+  - { id: food.rice,       gloss: "rice (cooked, a meal)", kind: noun, care: feed }
+  - { id: food.rice_grain, gloss: "rice (uncooked, to buy)", kind: noun }
+  - { id: food.bread,      gloss: bread,   kind: noun, care: feed }
+  - { id: food.fruit,      gloss: fruit,   kind: noun, care: feed }
+  - { id: food.egg,        gloss: egg,     kind: noun, care: feed }
+  - { id: food.soup,       gloss: soup,    kind: noun, care: feed }
+  - { id: food.cake,       gloss: cake,    kind: noun, care: feed }
+  - { id: food.cookie,     gloss: cookie,  kind: noun, care: feed }
+  - { id: drink.water,     gloss: water,   kind: noun, care: feed }
+  - { id: drink.milk,      gloss: milk,    kind: noun, care: feed }
+  - { id: taste.tasty,     gloss: tasty,   kind: adjective }
+  - { id: taste.spicy,     gloss: spicy,   kind: adjective }
+  - { id: taste.sour,      gloss: sour,    kind: adjective }
+  - { id: taste.sweet,     gloss: sweet,   kind: adjective }
+  - { id: temp.hot,        gloss: hot,     kind: adjective }
+  - { id: texture.soft,    gloss: soft,    kind: adjective }
+  - { id: smell.good,      gloss: "smells good", kind: adjective }
+
+  # Fruit
+  - { id: fruit.banana, gloss: banana, kind: noun, care: feed }
+  - { id: fruit.apple,  gloss: apple,  kind: noun, care: feed }
+  - { id: fruit.mango,  gloss: mango,  kind: noun, care: feed }
+  - { id: fruit.orange, gloss: orange, kind: noun, care: feed }
+  - { id: fruit.grapes, gloss: grapes, kind: noun, care: feed }
+  - { id: fruit.sour,   gloss: "sour fruit (Ekqo's favorite; the edition picks a common sour fruit)", kind: noun, care: feed }
+  - { id: food.spicy_dish, gloss: "a spicy dish (Ekqo dislikes it)", kind: noun, care: feed }
+
+  # Body
+  - { id: body.head,  gloss: head,  kind: noun, care: clean }
+  - { id: body.face,  gloss: face,  kind: noun, care: clean }
+  - { id: body.eyes,  gloss: eyes,  kind: noun, care: clean }
+  - { id: body.ears,  gloss: ears,  kind: noun, care: clean }
+  - { id: body.hands, gloss: hands, kind: noun, care: clean }
+  - { id: body.feet,  gloss: feet,  kind: noun, care: clean }
+  - { id: body.tummy, gloss: tummy, kind: noun, care: clean }
+
+  # Things
+  - { id: thing.soap,    gloss: soap,    kind: noun, care: clean }
+  - { id: thing.bubbles, gloss: bubbles, kind: noun, care: clean }
+  - { id: thing.towel,   gloss: towel,   kind: noun, care: clean }
+  - { id: thing.bed,     gloss: bed,     kind: noun, care: sleep }
+  - { id: thing.money,   gloss: money,   kind: noun }
+  - { id: thing.song,    gloss: song,    kind: noun }
+  - { id: thing.bridge,  gloss: bridge,  kind: noun }
+  - { id: thing.promise, gloss: promise, kind: noun }
+  - { id: toy.ball,      gloss: ball,    kind: noun, care: play }
+  - { id: toy.kite,      gloss: kite,    kind: noun, care: play }
+  - { id: play.swing,    gloss: swing,   kind: noun }
+  - { id: game.hide_and_seek, gloss: hide-and-seek, kind: noun, care: play }
+
+  # People and family
+  - { id: family.mother,  gloss: mother,      kind: noun }
+  - { id: family.father,  gloss: father,      kind: noun }
+  - { id: family.grandma, gloss: grandmother, kind: noun }
+  - { id: family.grandpa, gloss: grandfather, kind: noun }
+  - { id: family.family,  gloss: family,      kind: noun }
+  - { id: family.cousin,  gloss: cousin,      kind: noun }
+  - { id: people.friend,  gloss: friend,      kind: noun }
+
+  # Places and directions
+  - { id: place.garden, gloss: "garden / yard", kind: noun }
+  - { id: place.street, gloss: street,  kind: noun }
+  - { id: place.house,  gloss: house,   kind: noun }
+  - { id: place.shop,   gloss: shop,    kind: noun }
+  - { id: place.bakery, gloss: bakery,  kind: noun }
+  - { id: place.park,   gloss: park,    kind: noun }
+  - { id: place.market, gloss: market,  kind: noun }
+  - { id: dir.left,     gloss: left,    kind: direction }
+  - { id: dir.right,    gloss: right,   kind: direction }
+  - { id: dir.straight, gloss: straight, kind: direction }
+  - { id: dir.here,     gloss: here,    kind: direction }
+  - { id: dir.there,    gloss: "over there", kind: direction }
+  - { id: dir.near,     gloss: near,    kind: adjective }
+  - { id: dir.far,      gloss: far,     kind: adjective }
+
+  # Reference and description
+  - { id: ref.this_one, gloss: "this one", kind: phrase }
+  - { id: ref.that_one, gloss: "that one", kind: phrase }
+  - { id: color.red,    gloss: red,    kind: color }
+  - { id: color.blue,   gloss: blue,   kind: color }
+  - { id: color.yellow, gloss: yellow, kind: color }
+  - { id: color.green,  gloss: green,  kind: color }
+  - { id: color.white,  gloss: white,  kind: color }
+  - { id: color.black,  gloss: black,  kind: color }
+  - { id: size.big,     gloss: big,    kind: adjective }
+  - { id: size.small,   gloss: small,  kind: adjective }
+
+  # Nature, sky, time, weather
+  - { id: nature.light,  gloss: light,  kind: noun }
+  - { id: nature.flower, gloss: flower, kind: noun }
+  - { id: nature.tree,   gloss: tree,   kind: noun }
+  - { id: sky.star,      gloss: star,   kind: noun }
+  - { id: sky.moon,      gloss: moon,   kind: noun }
+  - { id: sky.sky,       gloss: sky,    kind: noun }
+  - { id: sky.cloud,     gloss: cloud,  kind: noun }
+  - { id: weather.rain,  gloss: rain,   kind: noun }
+  - { id: weather.thunder, gloss: thunder, kind: noun }
+  - { id: time.night,    gloss: night,  kind: noun }
+  - { id: time.soon,     gloss: soon,   kind: adverb }
+
+  # Numbers
+  - { id: num.1,  gloss: one,   kind: number, value: 1 }
+  - { id: num.2,  gloss: two,   kind: number, value: 2 }
+  - { id: num.3,  gloss: three, kind: number, value: 3 }
+  - { id: num.4,  gloss: four,  kind: number, value: 4 }
+  - { id: num.5,  gloss: five,  kind: number, value: 5 }
+  - { id: num.6,  gloss: six,   kind: number, value: 6 }
+  - { id: num.7,  gloss: seven, kind: number, value: 7 }
+  - { id: num.8,  gloss: eight, kind: number, value: 8 }
+  - { id: num.9,  gloss: nine,  kind: number, value: 9 }
+  - { id: num.10, gloss: ten,   kind: number, value: 10 }
+
+# Sentence patterns are communicative functions. Every edition implements each
+# pattern a quest names; the edition decides the words and word order.
+patterns:
+  - { id: pat.my_name_is,     meaning: "My name is ___",            slots: { x: player_name } }
+  - { id: pat.whats_your_name, meaning: "What is your name?",        slots: {} }
+  - { id: pat.want_to_eat,    meaning: "I want to eat ___",         slots: { x: "kind:noun care:feed" } }
+  - { id: pat.want_to_drink,  meaning: "I want to drink ___",       slots: { x: "prefix:drink." } }
+  - { id: pat.want_to_eat_q,  meaning: "Do you want to eat ___?",   slots: { x: "kind:noun care:feed" } }
+  - { id: pat.lets_wash,      meaning: "Let's wash ___",            slots: { x: "prefix:body." } }
+  - { id: pat.this_is,        meaning: "This is ___",               slots: { x: "prefix:family." } }
+  - { id: pat.where_is,       meaning: "Where is ___?",             slots: { x: "prefix:place." } }
+  - { id: pat.lets_together,  meaning: "Let's ___ together",        slots: { x: "kind:verb care:play" } }
+  - { id: pat.please_give_n,  meaning: "Please give me [number] [thing]", slots: { thing: "kind:noun", n: "prefix:num." } }
+  - { id: pat.how_many_q,     meaning: "How many?",                 slots: {} }
+  - { id: pat.ill_have,       meaning: "I'll have ___",             slots: { x: "kind:noun care:feed" } }
+  - { id: pat.what_would_you_like, meaning: "What would you like?", slots: {} }
+  - { id: pat.colored,        meaning: "It's ___ (color)",          slots: { x: "kind:color" } }
+  - { id: pat.what_color,     meaning: "What color is this?",       slots: {} }
+  - { id: pat.how_much,       meaning: "How much is ___?",          slots: { x: "prefix:fruit." } }
+  - { id: pat.do_you_like,    meaning: "Do you like ___?",          slots: { x: any } }
+  - { id: pat.i_like,         meaning: "I like ___",                slots: { x: any } }
+  - { id: pat.i_dont_like,    meaning: "I don't like ___",          slots: { x: any } }
+  - { id: pat.are_you_feeling, meaning: "Are you ___? (feeling)",   slots: { x: "prefix:feel." } }

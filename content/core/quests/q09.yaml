@@ -1,0 +1,24 @@
+# Q9. Colors in the Park. Storyboard 10.4.
+schema: ekqo.quest/1
+id: q09
+chapter: ch3
+title: "Colors in the Park"
+location: park
+characters: [ekqo, cousin]
+function: "Colors and sizes; describing things"
+topics: [color.red, color.blue, color.yellow, color.green, color.white, color.black, nature.flower, nature.tree, toy.kite, play.swing, size.big, size.small]
+patterns: [pat.colored, pat.what_color]
+listening_weight: normal
+reuses: [q03, q05, q06]
+ekqo: { abilities: [color_glow] }
+rewards: [kite]
+steps:
+  - { id: to_park,      type: scene, meaning: "The cousin takes them to the park. Sparks are hidden among flowers, kites and slides of different colors." }
+  - { id: teach_colors, type: teach, concepts: [color.red, color.blue, color.yellow, color.green, size.big, size.small], patterns: [pat.colored] }
+  - { id: ask_color,    type: say, speaker: cousin, meaning: "The child asks what color something is.", expects: { intent: "asks what color it is", pattern: pat.what_color }, ai: { npc_vary: true, judge: meaning }, note: "question pattern is a hear item; tap fallback carries it" }
+  - { id: describe_spark, type: use, speaker: cousin, repeat: 2, meaning: "The child describes where a spark is by its color.", expects: { intent: "names the color of the thing the spark is on", pattern: pat.colored }, ai: { npc_vary: true, judge: meaning } }
+  - { id: color_glow,   type: scene, meaning: "Ekqo changes his glow to each color the child says." }
+  - { id: which_bigger, type: say, speaker: cousin, meaning: "The child tells the cousin which one is bigger.", expects: { intent: "compares size", any_of: [size.big, size.small] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: puddle,       type: scene, meaning: "Ekqo jumps in a puddle and needs a wash back home.", effects: { need: { cleanliness: 3 } } }
+  - { id: review,       type: review }
+  - { id: reward,       type: reward, items: [kite], sparks: 2 }

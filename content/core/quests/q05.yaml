@@ -1,0 +1,27 @@
+# Q5. Ekqo Goes Outside. Storyboard 10.3.
+schema: ekqo.quest/1
+id: q05
+chapter: ch2
+title: "Ekqo Goes Outside"
+location: street
+characters: [ekqo, neighbor]
+function: "Asking where places are; following directions"
+topics: [place.street, place.house, place.shop, place.bakery, place.park, place.market, dir.left, dir.right, dir.straight, dir.here, dir.there, dir.near, dir.far]
+patterns: [pat.where_is]
+listening_weight: normal
+reuses: [q01, q02, q04]
+rewards: [map_street]
+unlocks: [location:shop, location:bakery]
+ekqo: { abilities: [say_it_slowly] }
+steps:
+  - { id: too_hungry,   type: care, action: feed, required: true, meaning: "Ekqo is too hungry to go out until he's fed." }
+  - { id: floats_out,   type: scene, meaning: "Ekqo floats out the door for the first time and spots tiny sparks of his light around the street." }
+  - { id: greet_neighbor, type: say, speaker: neighbor, meaning: "The child greets the neighbor.", expects: { intent: "greets politely", concepts: [greet.hello] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: neighbor_fast, type: line, speaker: neighbor, meaning: "(talking fast) Oh, hello! Who's this little one? So you're new here...", speed: fast }
+  - { id: slow_unlock,  type: reward, abilities: [say_it_slowly], meaning: "'Say it again slowly' unlocks." }
+  - { id: teach_places, type: teach, concepts: [place.shop, place.park, place.market, dir.left, dir.right, dir.straight], patterns: [pat.where_is] }
+  - { id: ask_where_shop, type: use, speaker: neighbor, meaning: "The child asks where the shop is.", expects: { intent: "asks where the shop is", pattern: pat.where_is, slot_values: { x: place.shop } }, ai: { npc_vary: true, judge: meaning } }
+  - { id: guide_ekqo,   type: use, speaker: ekqo, repeat: 2, meaning: "The child tells Ekqo which way to go.", expects: { intent: "gives a direction", any_of: [dir.left, dir.right, dir.straight] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: water_plants, type: scene, meaning: "Helping the neighbor water her plants gives Ekqo his first spark back." }
+  - { id: review,       type: review }
+  - { id: reward,       type: reward, items: [map_street], sparks: 1 }

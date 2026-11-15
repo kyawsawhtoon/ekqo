@@ -1,0 +1,29 @@
+# Q8. Fresh from the Oven (Chapter 2 finale). Storyboard 10.3.
+schema: ekqo.quest/1
+id: q08
+chapter: ch2
+title: "Fresh from the Oven"
+location: bakery
+characters: [ekqo, baker]
+function: "Choosing and ordering; describing food"
+topics: [food.bread, food.cake, food.cookie, ref.this_one, ref.that_one, q.what_would_you_like, phrase.ill_have, taste.sweet, temp.hot, texture.soft, smell.good]
+patterns: [pat.ill_have, pat.what_would_you_like]
+listening_weight: normal
+reuses: [q02, q07]
+discoveries: [ekqo.loves_music]
+ekqo: { stage_on_complete: 3, abilities: [light_touch] }
+rewards: [badge_ch2, baker_hat]
+unlocks: [location:park, location:market]
+steps:
+  - { id: smell_bread,  type: scene, meaning: "The smell of fresh bread leads them to the bakery." }
+  - { id: teach_order,  type: teach, concepts: [food.cake, ref.this_one, ref.that_one, phrase.ill_have, taste.sweet, temp.hot], patterns: [pat.ill_have] }
+  - { id: what_like,    type: use, speaker: baker, meaning: "The baker asks 'What would you like?'. The child orders a treat for the family.", expects: { intent: "orders a baked item", pattern: pat.ill_have }, ai: { npc_vary: true, judge: meaning } }
+  - { id: choose_two,   type: use, speaker: baker, meaning: "The child chooses between two items for Ekqo.", expects: { intent: "chooses this one or that one", any_of: [ref.this_one, ref.that_one] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: treat,        type: care, action: feed, meaning: "A treat for Ekqo (counts as feeding)." }
+  - { id: say_taste,    type: say, speaker: baker, meaning: "The child says how it tastes.", expects: { intent: "describes the taste or temperature", any_of: [taste.sweet, temp.hot, taste.tasty] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: baker_sings,  type: scene, meaning: "The baker sings while she works. Ekqo dances to her song." }
+  - { id: discover_music, type: discover, discovery: ekqo.loves_music }
+  - { id: oven_spark,   type: scene, meaning: "The last spark of the neighborhood is in the oven's glow." }
+  - { id: grow,         type: stage, stage: 3, meaning: "With all the sparks gathered, Ekqo grows. He can light things up when he touches them." }
+  - { id: review,       type: review }
+  - { id: reward,       type: reward, items: [badge_ch2, baker_hat], sparks: 1 }

@@ -1,0 +1,43 @@
+# Q12. The First Step Home (Chapter 3 and MVP finale). Storyboard 10.4.
+schema: ekqo.quest/1
+id: q12
+chapter: ch3
+title: "The First Step Home"
+location: park
+time_of_day: night
+characters: [ekqo, grandma, grandpa, parent, cousin, neighbor, shopkeeper, baker, fruit_seller]
+function: "Review: use the patterns from Q1-Q11 in a longer conversation"
+topics: [thing.bridge, place.house, phrase.go_home, thing.promise, expr.beautiful, time.soon]
+patterns: []
+listening_weight: normal
+reuses: [q01, q02, q03, q04, q05, q06, q07, q08, q09, q10, q11]
+discoveries: [ekqo.fav_place]
+ekqo: { stage_on_complete: 3, full_shine: true }
+rewards: [badge_act1, parent_certificate]
+steps:
+  - { id: needs_light,  type: scene, meaning: "Grandpa says the bridge needs a lot of light. That evening, everyone the child has met comes to the park." }
+  - id: review_round
+    type: review_round
+    meaning: "Each character asks the child for one thing from an earlier quest; each answer adds light."
+    asks:
+      - { speaker: neighbor,     from_quest: q05, intent: "asks where a place is or gives a direction" }
+      - { speaker: cousin,       from_quest: q06, intent: "invites someone to play" }
+      - { speaker: shopkeeper,   from_quest: q07, intent: "says a number / asks for something" }
+      - { speaker: baker,        from_quest: q08, intent: "chooses this one or that one" }
+      - { speaker: fruit_seller, from_quest: q10, intent: "names a fruit or asks the price" }
+      - { speaker: grandma,      from_quest: q04, intent: "says how they are" }
+      - { speaker: grandpa,      from_quest: q11, intent: "says how they feel or what they like" }
+  - id: talk_with_ekqo
+    type: conversation
+    speaker: ekqo
+    turns: 5
+    meaning: "A 5-turn conversation with Ekqo about his home."
+    expects: { intent: "keeps a friendly conversation with Ekqo about home, feelings and likes", open: true }
+    ai: { npc_vary: true, judge: meaning }
+  - { id: bridge_rises, type: scene, meaning: "The first part of the bridge rises above the park. Ekqo glimpses the Cloud Meadow." }
+  - { id: say_beautiful, type: say, speaker: ekqo, meaning: "The child reacts to the bridge.", expects: { intent: "says how beautiful it is", concepts: [expr.beautiful] }, ai: { npc_vary: false, judge: meaning } }
+  - { id: favorite_place, type: line, speaker: ekqo, meaning: "The park at night is my favorite place in the city." }
+  - { id: discover_place, type: discover, discovery: ekqo.fav_place }
+  - { id: full_shine,   type: stage, stage: 3, full_shine: true, meaning: "Ekqo's full Stage 3 shine." }
+  - { id: map_teaser,   type: scene, meaning: "The map shows the rest of his light scattered across the city: the start of Act 2." }
+  - { id: reward,       type: reward, items: [badge_act1, parent_certificate] }

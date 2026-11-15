@@ -1,0 +1,26 @@
+# Burmese templates for the core sentence patterns.
+# Slots: {x} is the slot's word; {x.stem} drops the statement ending တယ်;
+# {thing.classifier} is the counting word from the lexicon entry (default ခု).
+schema: ekqo.edition-patterns/1
+edition: my
+patterns:
+  - { id: pat.my_name_is,      template: "နာမည် {x} ပါ" }
+  - { id: pat.whats_your_name, template: "နာမည် ဘယ်လို ခေါ်လဲ" }
+  - { id: pat.want_to_eat,     template: "{x} စားချင်တယ်" }
+  - { id: pat.want_to_drink,   template: "{x} သောက်ချင်တယ်" }
+  - { id: pat.want_to_eat_q,   template: "{x} စားချင်လား" }
+  - { id: pat.lets_wash,       template: "{x} ဆေးမယ်" }
+  - { id: pat.this_is,         template: "ဒါ {x} ပါ" }
+  - { id: pat.where_is,        template: "{x} ဘယ်မှာလဲ" }
+  - { id: pat.lets_together,   template: "အတူတူ {x} ရအောင်" }
+  - { id: pat.please_give_n,   template: "{thing} {n} {thing.classifier} ပေးပါ", note: "Q7 is taught with ခု; round things (eggs, fruit) take လုံး, heard in Q10. Answer checking accepts either." }
+  - { id: pat.how_many_q,      template: "ဘယ်နှစ်ခုလဲ" }
+  - { id: pat.ill_have,        template: "{x} ယူမယ်" }
+  - { id: pat.what_would_you_like, template: "ဘာ ယူမလဲ" }
+  - { id: pat.colored,         template: "{x}ရောင်" }
+  - { id: pat.what_color,      template: "ဒါ ဘာအရောင်လဲ" }
+  - { id: pat.how_much,        template: "{x} ဘယ်လောက်လဲ" }
+  - { id: pat.do_you_like,     template: "{x} ကြိုက်လား" }
+  - { id: pat.i_like,          template: "{x} ကြိုက်တယ်" }
+  - { id: pat.i_dont_like,     template: "{x} မကြိုက်ဘူး" }
+  - { id: pat.are_you_feeling, template: "{x.stem}လား", status: draft, note: "Not in the approved v1.0 list; used by care prompts (ဗိုက်ဆာလား, အိပ်ချင်လား, ကြောက်လား)" }

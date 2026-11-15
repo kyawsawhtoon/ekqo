@@ -1,0 +1,84 @@
+# Caring for Ekqo. Storyboard section 6 and BRD 5.2 / FR-03.
+# Rules the engine must enforce are under `rules`; they are not tunable per edition.
+schema: ekqo.care/1
+
+rules:
+  needs_change: during_play_only      # never while the game is closed
+  on_return_after_days: { hunger: slightly_hungry, others: content, mood: happy_to_see_you }
+  worst_state: grumpy                 # never dies, runs away or gets seriously ill
+  notifications_to_child: false
+  items_source: quests_only           # never bought
+  display: face_glow_body             # no number bars; optional small mood icon
+  growth_from_care: false             # growth comes from quests and speaking only
+
+# Need levels go 0 (fully met) to 3 (strongly needed). Rates are per minute of
+# active play and are starting points for playtesting.
+needs:
+  - id: hunger
+    unlocked_by: q02
+    rise_per_active_minute: 0.12
+    cues: [tummy_rumble, glow_dims, looks_at_fridge]
+    met_by: feed
+  - id: cleanliness
+    unlocked_by: q03
+    rise_per_active_minute: 0.06
+    rise_on_events: { muddy_puddle: 3 }
+    cues: [mud_spots, leaves_stuck, sneezes]
+    met_by: clean
+  - id: sleep
+    unlocked_by: q04
+    rise_per_active_minute: 0.05
+    cues: [yawns, eyes_droop, floats_lower]
+    met_by: sleep
+  - id: fun
+    unlocked_by: q06
+    rise_per_active_minute: 0.08
+    cues: [bored, sighs, pokes_child]
+    met_by: play
+
+moods:
+  - { id: happy,  when: "all needs <= 1",            bonus: { glow: bright, extra_hint: true, animation: happy } }
+  - { id: okay,   when: "any need == 2",             bonus: {} }
+  - { id: grumpy, when: "any need == 3",             effect: { animation: slow_grumpy } }   # cosmetic only
+
+# Each care action is a short speaking moment. Prompts are language-neutral;
+# editions give the lines. Items are drawn from concepts the child has met.
+actions:
+  - id: feed
+    need: hunger
+    location_area: house.kitchen
+    items_from: "care:feed"            # any concept tagged care: feed that the child has heard
+    item_source: inventory             # food earned in quests
+    moments:
+      - { id: ask_hungry,  role: child_says, pattern: pat.are_you_feeling, fill: { x: feel.hungry }, meaning: "Are you hungry?" }
+      - { id: offer_food,  role: child_says, pattern: pat.want_to_eat_q, meaning: "Do you want to eat ___?" }
+      - { id: taste_reply, role: ekqo_says,  meaning: "Ekqo says how it tastes (tasty, sour, spicy, sweet)", draws_from: "prefix:taste." }
+  - id: clean
+    need: cleanliness
+    location_area: house.bathroom
+    items_from: "care:clean"
+    music: bath_tune
+    moments:
+      - { id: say_dirty,   role: child_says, meaning: "You're dirty!", concepts: [state.dirty] }
+      - { id: wash_part,   role: child_says, pattern: pat.lets_wash, meaning: "Let's wash your ___" }
+      - { id: where_dirty, role: ekqo_says,  meaning: "Ekqo says which part is dirty", draws_from: "prefix:body." }
+  - id: sleep
+    need: sleep
+    location_area: house.bedroom
+    music: star_tune
+    moments:
+      - { id: ask_sleepy,  role: child_says, pattern: pat.are_you_feeling, fill: { x: feel.sleepy }, meaning: "Are you sleepy?" }
+      - { id: good_night,  role: child_says, meaning: "Good night", concepts: [phrase.good_night] }
+  - id: play
+    need: fun
+    location_area: any
+    items_from: "care:play"
+    music: hide_seek_tune
+    moments:
+      - { id: lets_play,   role: child_says, pattern: pat.lets_together, meaning: "Let's play ___" }
+      - { id: again,       role: child_says, meaning: "Again!", concepts: [phrase.again] }
+  - id: comfort
+    need: null                          # story-only action (Q11); no need meter
+    moments:
+      - { id: ask_feeling, role: child_says, pattern: pat.are_you_feeling, meaning: "Are you scared / sad?" }
+      - { id: reassure,    role: child_says, meaning: "Don't be scared", concepts: [phrase.dont_be_scared] }

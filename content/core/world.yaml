@@ -1,0 +1,187 @@
+# Ekqo core world: the same in every language edition.
+# Source: storyboard v1.0 sections 3, 5, 9, 11.4, 11.5. English text here is
+# authoring intent ("meaning"), not player-facing copy; editions supply the text.
+schema: ekqo.world/1
+
+ekqo:
+  stages:
+    - { stage: 1, id: spark,    name: Spark,    reached: "quest:q01", moves: hop }
+    - { stage: 2, id: glow,     name: Glow,     reached: "quest:q04", moves: float }
+    - { stage: 3, id: radiance, name: Radiance, reached: "quest:q08", moves: float, power: light_touch }
+  abilities:
+    - { id: word_book,       meaning: "The word collection book, including the About Ekqo pages", unlocked_by: q01 }
+    - { id: hint_glow,       meaning: "Ekqo glows over the right answer when the child asks for a hint", unlocked_by: q01 }
+    - { id: say_it_slowly,   meaning: "Replays the last line slowly", unlocked_by: q05 }
+    - { id: light_touch,     meaning: "Ekqo lights things up when he touches them", unlocked_by: q08 }
+    - { id: color_glow,      meaning: "Ekqo changes his glow to the color the child says", unlocked_by: q09 }
+
+characters:
+  - id: ekqo
+    role: companion
+    personality: "Curious, warm, a little clumsy. New to the city, learns alongside the child, never lectures."
+    speaks_to_child: casual
+    voice: { gender: neutral, style: small_bright, pitch: high }
+    first_chapter: 1
+  - id: grandma
+    role: family
+    personality: "Warm, a bit fussy, always feeding everyone. Runs the house and cooks."
+    speaks_to_child: casual
+    child_speaks_to: polite
+    voice: { gender: female, style: warm, age: older }
+    first_chapter: 1
+  - id: grandpa
+    role: family
+    personality: "Calm, funny, full of old stories. Loves stargazing."
+    speaks_to_child: casual
+    child_speaks_to: polite
+    voice: { gender: male, style: calm, age: older }
+    first_chapter: 1
+  - id: parent
+    role: family
+    personality: "Busy but kind. Came on the trip with the child and sends them on errands."
+    speaks_to_child: casual
+    child_speaks_to: polite
+    voice: { gender: player_choice, style: kind, age: adult }
+    first_chapter: 1
+  - id: cousin
+    role: friend
+    personality: "Same age as the child. Energetic, brave, a little bossy. Best friend and playmate."
+    speaks_to_child: casual
+    child_speaks_to: casual
+    voice: { gender: edition, style: energetic, age: child }
+    first_chapter: 2
+  - id: neighbor
+    role: neighbor
+    personality: "Chatty and helpful gardener next door who gives directions. Talks a little fast."
+    speaks_to_child: casual
+    child_speaks_to: polite
+    voice: { gender: female, style: chatty, age: adult }
+    first_chapter: 2
+  - id: shopkeeper
+    role: shopkeeper
+    personality: "Patient and cheerful. Runs the corner shop."
+    speaks_to_child: casual
+    child_speaks_to: polite
+    voice: { gender: male, style: cheerful, age: adult }
+    first_chapter: 2
+  - id: baker
+    role: shopkeeper
+    personality: "Loud and jolly. Sings while she works."
+    speaks_to_child: casual
+    child_speaks_to: polite
+    voice: { gender: female, style: jolly, age: adult }
+    first_chapter: 2
+  - id: fruit_seller
+    role: market_seller
+    personality: "Market fruit seller who always rounds the price down for children."
+    speaks_to_child: casual
+    child_speaks_to: polite
+    voice: { gender: female, style: friendly, age: adult }
+    first_chapter: 3
+  - id: veg_seller
+    role: market_seller
+    personality: "Market vegetable seller who laughs at everything Ekqo does."
+    speaks_to_child: casual
+    child_speaks_to: polite
+    voice: { gender: male, style: laughing, age: adult }
+    first_chapter: 3
+
+locations:
+  - id: house
+    meaning: "Grandparents' house, the home base"
+    unlocked_by: start
+    areas: [garden, kitchen, bathroom, bedroom, living_room]
+  - id: street
+    meaning: "Neighborhood street"
+    unlocked_by: q04
+    areas: [houses, neighbor_garden]
+  - id: shop
+    meaning: "Corner shop"
+    unlocked_by: q05
+    areas: [shelves, counter]
+  - id: bakery
+    meaning: "Bakery"
+    unlocked_by: q05
+    areas: [display_case, counter]
+  - id: park
+    meaning: "Park and playground"
+    unlocked_by: q08
+    areas: [lawn, swings, night_sky]
+  - id: market
+    meaning: "Market"
+    unlocked_by: q08
+    areas: [fruit_stall, veg_stall]
+
+chapters:
+  - id: ch1
+    number: 1
+    title: "A Light in the Garden"
+    quests: [q01, q02, q03, q04]
+    tune: bath_tune
+    ends_with_stage: 2
+    i_can:
+      - "Say hello and goodbye, and say their name."
+      - "Name family members and say how they are."
+      - "Say they are hungry or thirsty and ask for simple food and drinks."
+      - "Understand simple instructions about the body."
+  - id: ch2
+    number: 2
+    title: "Pieces of Light"
+    quests: [q05, q06, q07, q08]
+    tune: hide_seek_tune
+    ends_with_stage: 3
+    i_can:
+      - "Ask where a place is and understand left, right and straight."
+      - "Invite a friend to play."
+      - "Ask for things using numbers 1-5, and say please and thank you."
+      - "Choose between 'this one' and 'that one'."
+  - id: ch3
+    number: 3
+    title: "The First Step Home"
+    quests: [q09, q10, q11, q12]
+    tune: star_tune
+    ends_with_stage: 3
+    i_can:
+      - "Name colors and sizes."
+      - "Name common fruits and ask the price, and understand numbers 6-10."
+      - "Say how they feel and what they like or don't like."
+      - "Hold a short conversation of about 5 turns."
+
+tunes:
+  - { id: bath_tune,      meaning: "Bouncy and splashy; bath time and cleaning", lyrics: false }
+  - { id: hide_seek_tune, meaning: "Playful with a counting rhythm; hide-and-seek and play", lyrics: false }
+  - { id: star_tune,      meaning: "Calm lullaby; bedtime, after the storm, the bridge finale, Ekqo missing home", lyrics: false }
+
+items:
+  - { id: glow_jar,       kind: room,    meaning: "A glowing jar where Ekqo sleeps" }
+  - { id: ekqo_bowl,      kind: care,    meaning: "Ekqo's own little bowl" }
+  - { id: bubble_toy,     kind: care,    meaning: "A bubble toy for the bath" }
+  - { id: badge_ch1,      kind: badge,   meaning: "Chapter 1 badge" }
+  - { id: outfit_ch1,     kind: outfit,  meaning: "A new outfit for the child" }
+  - { id: map_street,     kind: key,     meaning: "The neighborhood map" }
+  - { id: ball,           kind: care,    meaning: "A ball to play with" }
+  - { id: shopping_bag,   kind: key,     meaning: "A shopping bag" }
+  - { id: badge_ch2,      kind: badge,   meaning: "Chapter 2 badge" }
+  - { id: baker_hat,      kind: outfit,  meaning: "A baker's hat" }
+  - { id: kite,           kind: room,    meaning: "A kite for the child's room" }
+  - { id: fruit_basket,   kind: care,    meaning: "A fruit basket" }
+  - { id: star_map,       kind: room,    meaning: "A star map for the child's room" }
+  - { id: badge_act1,     kind: badge,   meaning: "Act 1 badge" }
+  - { id: parent_certificate, kind: parent, meaning: "A certificate for parents in the parent area" }
+
+learning:
+  # Storyboard 11.1-11.3. Engine-level rules; editions do not change these.
+  steps: [hear, show, echo, say, use]
+  tap_fallback: always
+  skip_show_echo_when: "first-try correct at the say step for those words"
+  learned_after_distinct_situations: 3
+  end_of_quest_review: { from_this_quest: [3, 4], from_earlier: [1, 2] }
+  ekqo_forgets_on_purpose: { every_n_quests: 2 }
+  say_words_per_quest: [6, 8]
+  hear_words_per_quest: 6
+  feedback:
+    praise: attempt
+    on_wrong: recast
+    scores: false
+    timers: false
+    failure_screens: false

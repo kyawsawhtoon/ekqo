@@ -1,0 +1,27 @@
+# Q3. Bath Time. Storyboard 10.2.
+schema: ekqo.quest/1
+id: q03
+chapter: ch1
+title: "Bath Time"
+location: house.bathroom
+characters: [ekqo, parent]
+function: "Naming body parts; giving simple instructions"
+topics: [body.head, body.face, body.eyes, body.ears, body.hands, body.feet, body.tummy, drink.water, thing.soap, thing.bubbles, thing.towel, verb.wash, state.dirty, state.clean]
+patterns: [pat.lets_wash]
+listening_weight: heavy
+reuses: [q01, q02]
+care: { unlocks: clean }
+discoveries: [ekqo.loves_bubbles]
+rewards: [bubble_toy]
+music: bath_tune
+steps:
+  - { id: still_muddy,  type: scene, meaning: "Ekqo is still covered in garden mud. The parent runs a bath." }
+  - { id: teach_body,   type: teach, concepts: [body.head, body.face, body.hands, body.feet, verb.wash, thing.soap], patterns: [pat.lets_wash] }
+  - { id: wash_parts,   type: use, speaker: ekqo, repeat: 3, meaning: "The child tells Ekqo which part to wash.", expects: { intent: "names a body part to wash", pattern: pat.lets_wash }, ai: { npc_vary: true, judge: meaning } }
+  - { id: bubbles,      type: scene, meaning: "Ekqo discovers soap bubbles and goes wild with joy." }
+  - { id: discover_bubbles, type: discover, discovery: ekqo.loves_bubbles }
+  - { id: ask_towel,    type: say, speaker: parent, meaning: "The child asks the parent for a towel.", expects: { intent: "asks for a towel", concepts: [thing.towel, phrase.please_give] }, ai: { npc_vary: true, judge: meaning }, note: "towel is a hear word here; tap fallback carries it" }
+  - { id: say_clean,    type: say, speaker: ekqo, meaning: "The child says 'You're clean now!'.", expects: { intent: "tells Ekqo he is clean", concepts: [state.clean] }, ai: { npc_vary: false, judge: meaning } }
+  - { id: clean_unlock, type: care, action: clean, first_time: true, meaning: "Cleaning unlocks." }
+  - { id: review,       type: review }
+  - { id: reward,       type: reward, items: [bubble_toy] }

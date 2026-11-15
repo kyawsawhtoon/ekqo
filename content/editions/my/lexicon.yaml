@@ -1,0 +1,160 @@
+# Burmese word forms for core concepts. Words come from the approved v1.0
+# word lists unless marked `status: draft`. `roman` is left empty until the
+# romanization scheme is decided (architecture doc, open item R1).
+# `stem` is the form without the statement ending, used by {x.stem}.
+schema: ekqo.lexicon/1
+edition: my
+entries:
+  # Q1
+  - { concept: greet.hello,   text: မင်္ဂလာပါ }
+  - { concept: word.name,     text: နာမည် }
+  - { concept: ans.yes,       text: ဟုတ်ကဲ့ }
+  - { concept: ans.no,        text: မဟုတ်ဘူး }
+  - { concept: greet.bye,     text: တာ့တာ }
+  - { concept: q.who,         text: ဘယ်သူလဲ }
+  - { concept: nature.light,  text: အလင်း }
+  - { concept: sky.star,      text: ကြယ် }
+  - { concept: time.night,    text: ည }
+  - { concept: place.garden,  text: ခြံ }
+  - { concept: phrase.dont_be_scared, text: မကြောက်နဲ့ }
+  # Q2
+  - { concept: feel.hungry,   text: ဗိုက်ဆာတယ်, stem: ဗိုက်ဆာ }
+  - { concept: verb.eat,      text: စား }
+  - { concept: verb.drink,    text: သောက် }
+  - { concept: food.rice,     text: ထမင်း }
+  - { concept: food.bread,    text: ပေါင်မုန့် }
+  - { concept: food.fruit,    text: အသီး, classifier: လုံး }
+  - { concept: drink.water,   text: ရေ }
+  - { concept: drink.milk,    text: နို့ }
+  - { concept: feel.thirsty,  text: ရေဆာတယ်, stem: ရေဆာ }
+  - { concept: food.egg,      text: ကြက်ဥ, classifier: လုံး }
+  - { concept: food.soup,     text: ဟင်းချို }
+  - { concept: taste.tasty,   text: စားကောင်းတယ်, stem: စားကောင်း }
+  - { concept: taste.spicy,   text: စပ်တယ်, stem: စပ် }
+  - { concept: taste.sour,    text: ချဉ်တယ်, stem: ချဉ် }
+  # Q3
+  - { concept: body.head,     text: ခေါင်း }
+  - { concept: body.face,     text: မျက်နှာ }
+  - { concept: body.hands,    text: လက် }
+  - { concept: body.feet,     text: ခြေထောက် }
+  - { concept: verb.wash,     text: ဆေး }
+  - { concept: thing.soap,    text: ဆပ်ပြာ }
+  - { concept: body.eyes,     text: မျက်စိ }
+  - { concept: body.ears,     text: နား }
+  - { concept: body.tummy,    text: ဗိုက် }
+  - { concept: thing.bubbles, text: ဆပ်ပြာပူဖောင်း }
+  - { concept: thing.towel,   text: မျက်နှာသုတ်ပဝါ }
+  - { concept: state.dirty,   text: ညစ်ပတ်နေတယ်, stem: ညစ်ပတ်နေ }
+  - { concept: state.clean,   text: သန့်သွားပြီ }
+  # Q4
+  - { concept: family.mother,  text: အမေ }
+  - { concept: family.father,  text: အဖေ }
+  - { concept: family.grandma, text: အဘွား }
+  - { concept: family.grandpa, text: အဘိုး }
+  - { concept: phrase.how_are_you, text: နေကောင်းလား }
+  - { concept: phrase.im_fine,    text: နေကောင်းပါတယ် }
+  - { concept: phrase.good_night, text: အိပ်တော့ }
+  - { concept: family.family,  text: မိသားစု }
+  - { concept: feel.sleepy,    text: အိပ်ချင်တယ်, stem: အိပ်ချင် }
+  - { concept: thing.bed,      text: အိပ်ယာ }
+  - { concept: phrase.welcome, text: ကြိုဆိုပါတယ် }
+  # Q5
+  - { concept: place.shop,    text: ဆိုင် }
+  - { concept: place.park,    text: ပန်းခြံ }
+  - { concept: place.market,  text: ဈေး }
+  - { concept: dir.left,      text: ဘယ်ဘက် }
+  - { concept: dir.right,     text: ညာဘက် }
+  - { concept: dir.straight,  text: တည့်တည့် }
+  - { concept: place.street,  text: လမ်း }
+  - { concept: place.house,   text: အိမ် }
+  - { concept: place.bakery,  text: မုန့်ဖုတ်ဆိုင် }
+  - { concept: dir.here,      text: ဒီမှာ }
+  - { concept: dir.there,     text: ဟိုမှာ }
+  - { concept: dir.near,      text: နီးတယ်, stem: နီး }
+  - { concept: dir.far,       text: ဝေးတယ်, stem: ဝေး }
+  # Q6
+  - { concept: verb.play,     text: ကစား }
+  - { concept: verb.run,      text: ပြေး }
+  - { concept: verb.jump,     text: ခုန် }
+  - { concept: verb.hide,     text: ပုန်း }
+  - { concept: verb.find,     text: ရှာ }
+  - { concept: toy.ball,      text: ဘောလုံး }
+  - { concept: phrase.again,  text: နောက်တစ်ခါ }
+  - { concept: people.friend, text: သူငယ်ချင်း }
+  - { concept: family.cousin, text: ဝမ်းကွဲ }
+  - { concept: game.hide_and_seek, text: ပုန်းတမ်းကစား }
+  - { concept: feel.happy,    text: ပျော်တယ်, stem: ပျော် }
+  - { concept: phrase.turn,   text: အလှည့် }
+  # Q7
+  - { concept: num.1, text: တစ် }
+  - { concept: num.2, text: နှစ် }
+  - { concept: num.3, text: သုံး }
+  - { concept: num.4, text: လေး }
+  - { concept: num.5, text: ငါး }
+  - { concept: phrase.please_give, text: ပေးပါ }
+  - { concept: phrase.thank_you,   text: ကျေးဇူးတင်ပါတယ် }
+  - { concept: x.my.classifier_item, text: ခု, local: true, gloss: "counting word for items" }
+  - { concept: q.how_many,         text: ဘယ်နှစ်ခုလဲ }
+  - { concept: food.rice_grain,    text: ဆန် }
+  - { concept: phrase.thats_all,   text: ဒါပဲ }
+  - { concept: thing.money,        text: ပိုက်ဆံ }
+  # Q8
+  - { concept: food.cake,     text: ကိတ်မုန့် }
+  - { concept: ref.this_one,  text: ဒီဟာ }
+  - { concept: ref.that_one,  text: ဟိုဟာ }
+  - { concept: phrase.ill_have, text: ယူမယ် }
+  - { concept: taste.sweet,   text: ချိုတယ်, stem: ချို }
+  - { concept: temp.hot,      text: ပူတယ်, stem: ပူ }
+  - { concept: food.cookie,   text: ကွတ်ကီး }
+  - { concept: q.what_would_you_like, text: ဘာ ယူမလဲ }
+  - { concept: texture.soft,  text: နူးညံ့တယ်, stem: နူးညံ့ }
+  - { concept: smell.good,    text: မွှေးတယ်, stem: မွှေး }
+  - { concept: thing.song,    text: သီချင်း }
+  # Q9
+  - { concept: color.red,     text: အနီ }
+  - { concept: color.blue,    text: အပြာ }
+  - { concept: color.yellow,  text: အဝါ }
+  - { concept: color.green,   text: အစိမ်း }
+  - { concept: size.big,      text: ကြီးတယ်, stem: ကြီး }
+  - { concept: size.small,    text: သေးတယ်, stem: သေး }
+  - { concept: color.white,   text: အဖြူ }
+  - { concept: color.black,   text: အနက် }
+  - { concept: nature.flower, text: ပန်း }
+  - { concept: nature.tree,   text: သစ်ပင် }
+  - { concept: toy.kite,      text: စွန် }
+  - { concept: play.swing,    text: ဒန်း }
+  # Q10
+  - { concept: fruit.banana,  text: ငှက်ပျောသီး, classifier: လုံး }
+  - { concept: fruit.apple,   text: ပန်းသီး, classifier: လုံး }
+  - { concept: fruit.mango,   text: သရက်သီး, classifier: လုံး }
+  - { concept: fruit.orange,  text: လိမ္မော်သီး, classifier: လုံး }
+  - { concept: q.how_much,    text: ဘယ်လောက်လဲ }
+  - { concept: phrase.ill_buy, text: ဝယ်မယ် }
+  - { concept: fruit.grapes,  text: စပျစ်သီး }
+  - { concept: num.6,  text: ခြောက် }
+  - { concept: num.7,  text: ခုနစ် }
+  - { concept: num.8,  text: ရှစ် }
+  - { concept: num.9,  text: ကိုး }
+  - { concept: num.10, text: တစ်ဆယ် }
+  - { concept: x.my.classifier_round, text: လုံး, local: true, gloss: "counting word for round things" }
+  # Q11
+  - { concept: feel.sad,      text: ဝမ်းနည်းတယ်, stem: ဝမ်းနည်း }
+  - { concept: feel.scared,   text: ကြောက်တယ်, stem: ကြောက် }
+  - { concept: verb.like,     text: ကြိုက်တယ်, stem: ကြိုက် }
+  - { concept: verb.dont_like, text: မကြိုက်ဘူး }
+  - { concept: feel.tired,    text: ပင်ပန်းတယ်, stem: ပင်ပန်း }
+  - { concept: sky.moon,      text: လ }
+  - { concept: sky.sky,       text: ကောင်းကင် }
+  - { concept: sky.cloud,     text: တိမ် }
+  - { concept: weather.rain,  text: မိုး }
+  - { concept: weather.thunder, text: မိုးချုန်း }
+  - { concept: feel.miss,     text: လွမ်းတယ်, stem: လွမ်း }
+  # Q12
+  - { concept: expr.beautiful, text: လှလိုက်တာ }
+  - { concept: thing.bridge,   text: တံတား }
+  - { concept: phrase.go_home, text: အိမ်ပြန် }
+  - { concept: time.soon,      text: မကြာခင် }
+  - { concept: thing.promise,  text: ကတိ }
+  - { concept: phrase.come_back, text: ပြန်လာခဲ့ }
+  # Not yet in the edition (validator reports these as gaps):
+  # fruit.sour (Ekqo's favorite sour fruit), food.spicy_dish

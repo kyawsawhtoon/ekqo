@@ -1,0 +1,14 @@
+{
+    "name": "Ekqo.Game",
+    "rootNamespace": "Ekqo.Game",
+    "references": ["Ekqo.Core", "Ekqo.Content", "Ekqo.Speech"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,27 @@
+# Q6. A New Best Friend. Storyboard 10.3.
+schema: ekqo.quest/1
+id: q06
+chapter: ch2
+title: "A New Best Friend"
+location: house.garden
+characters: [ekqo, cousin]
+function: "Inviting someone to play; play actions"
+topics: [people.friend, verb.play, verb.run, verb.jump, verb.hide, verb.find, toy.ball, phrase.again, phrase.turn, feel.happy]
+patterns: [pat.lets_together]
+listening_weight: normal
+reuses: [q01, q04]
+care: { unlocks: play }
+discoveries: [ekqo.fav_game]
+rewards: [ball]
+music: hide_seek_tune
+steps:
+  - { id: cousin_doubts, type: scene, meaning: "The cousin comes over and doesn't believe Ekqo is real until he pops out from behind a flowerpot." }
+  - { id: teach_play,   type: teach, concepts: [verb.play, verb.run, verb.jump, verb.hide, verb.find, toy.ball, phrase.again], patterns: [pat.lets_together] }
+  - { id: invite,       type: use, speaker: cousin, meaning: "The child invites the cousin to play.", expects: { intent: "invites the cousin to play something", pattern: pat.lets_together }, ai: { npc_vary: true, judge: meaning } }
+  - { id: cousin_counts, type: line, speaker: cousin, meaning: "(counting out loud before seeking) One, two, three, four, five!", concepts: [num.1, num.2, num.3, num.4, num.5] }
+  - { id: whose_turn,   type: say, speaker: cousin, meaning: "The child says whose turn it is.", expects: { intent: "says it's their turn / again", any_of: [phrase.turn, phrase.again] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: found_ekqo,   type: use, speaker: ekqo, meaning: "Ekqo hides somewhere that glows. The child calls out when they find him.", expects: { intent: "calls out that they found Ekqo", concepts: [verb.find] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: discover_game, type: discover, discovery: ekqo.fav_game }
+  - { id: play_unlock,  type: care, action: play, first_time: true, meaning: "Play unlocks." }
+  - { id: review,       type: review }
+  - { id: reward,       type: reward, items: [ball], friends: [cousin] }

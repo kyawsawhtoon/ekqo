@@ -1,0 +1,28 @@
+# Q2. Hungry Ekqo. Storyboard 10.2.
+schema: ekqo.quest/1
+id: q02
+chapter: ch1
+title: "Hungry Ekqo"
+location: house.kitchen
+time_of_day: morning
+characters: [ekqo, grandma]
+function: "Saying what you want to eat and drink; hungry and thirsty"
+topics: [feel.hungry, feel.thirsty, verb.eat, verb.drink, food.rice, food.bread, food.egg, food.soup, food.fruit, drink.milk, drink.water, taste.tasty, taste.spicy, taste.sour]
+patterns: [pat.want_to_eat, pat.want_to_drink, pat.want_to_eat_q]
+listening_weight: heavy
+reuses: [q01]
+care: { unlocks: feed }
+discoveries: [ekqo.fav_food, ekqo.dislike_spicy]
+rewards: [ekqo_bowl]
+steps:
+  - { id: tummy_rumbles, type: scene, meaning: "Morning. Ekqo's tummy rumbles loudly. Grandma is surprised but delighted." }
+  - { id: teach_food,   type: teach, concepts: [feel.hungry, verb.eat, verb.drink, food.rice, food.bread, food.fruit, drink.water, drink.milk], patterns: [pat.want_to_eat, pat.want_to_drink] }
+  - { id: ask_hungry,   type: say, speaker: ekqo, meaning: "The child asks Ekqo if he's hungry.", expects: { intent: "asks Ekqo whether he is hungry", concepts: [feel.hungry] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: ask_grandma_food, type: use, speaker: grandma, meaning: "Grandma asks what Ekqo wants. The child asks for a food for him.", expects: { intent: "asks Grandma for a food", pattern: pat.want_to_eat }, ai: { npc_vary: true, judge: meaning } }
+  - { id: ask_grandma_drink, type: use, speaker: grandma, meaning: "The child asks for a drink for him.", expects: { intent: "asks Grandma for a drink", pattern: pat.want_to_drink }, ai: { npc_vary: true, judge: meaning } }
+  - { id: try_foods,    type: care, action: feed, meaning: "The child tries different foods with Ekqo. Feeding unlocks.", first_time: true }
+  - { id: discover_sour, type: discover, discovery: ekqo.fav_food }
+  - { id: discover_spicy, type: discover, discovery: ekqo.dislike_spicy }
+  - { id: tell_grandma_likes, type: say, speaker: grandma, meaning: "The child tells Grandma he likes it.", expects: { intent: "says Ekqo likes the food / it is tasty", any_of: [taste.tasty, verb.like] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: review,       type: review }
+  - { id: reward,       type: reward, items: [ekqo_bowl] }
