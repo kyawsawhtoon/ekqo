@@ -1,0 +1,6 @@
+schema: ekqo.edition-quest/1
+edition: my
+quest: q07
+say: [num.1, num.2, num.3, num.4, num.5, phrase.please_give, phrase.thank_you]
+hear: [x.my.classifier_item, q.how_many, food.rice_grain, phrase.thats_all, thing.money]
+lines: {}        # TODO: Burmese lines for this quest's line and say/use steps (drafted offline, native-speaker reviewed)

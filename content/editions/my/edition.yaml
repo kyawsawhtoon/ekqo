@@ -1,0 +1,64 @@
+# Burmese edition (MVP). Source: storyboard/Ekqo Burmese Edition.md v1.0.
+schema: ekqo.edition/1
+id: my
+name: Burmese
+native_name: မြန်မာ
+locale: my-MM
+script: Mymr
+encoding: unicode            # standard Myanmar Unicode only; Zawgyi input is rejected by the validator
+direction: ltr
+support_language: en
+font: { family: "Noto Sans Myanmar", bundled: true }
+word_separator: none         # Burmese has no spaces between words; answer matching must not split on spaces
+romanization:
+  scheme: null               # [Decide] see architecture doc, open item R1
+  status: missing
+
+speech:
+  stt: { provider: azure, locale: my-MM, fallback: { provider: google, locale: my-MM } }
+  pronunciation_scoring: false
+  tts:
+    provider: azure
+    voices:                  # Azure neural voices for my-MM
+      female: my-MM-NilarNeural
+      male: my-MM-ThihaNeural
+    # Per-character tuning. Ekqo: female voice raised in pitch, slightly slower.
+    characters:
+      ekqo:         { voice: female, pitch: "+25%", rate: "-5%" }
+      grandma:      { voice: female, pitch: "-5%",  rate: "-10%" }
+      grandpa:      { voice: male,   pitch: "-10%", rate: "-10%" }
+      parent:       { voice: player_choice }
+      cousin:       { voice: male,   pitch: "+20%" }
+      neighbor:     { voice: female, rate: "+15%" }
+      shopkeeper:   { voice: male }
+      baker:        { voice: female, pitch: "+5%" }
+      fruit_seller: { voice: female }
+      veg_seller:   { voice: male }
+
+register:
+  summary: >-
+    Polite ending ပါ in requests and greetings to adults; everyday ending တယ် in
+    statements. Children speak casually to Ekqo and the cousin, and politely to adults.
+  polite_marker: ပါ
+  statement_ending: တယ်
+  child_to_adult: polite
+  child_to_peer: casual
+
+profile_options:
+  ask_player_gender: optional   # covers ကျွန်တော် / ကျွန်မ where a pronoun can't be left out
+
+names:
+  ekqo:         { text: "Ekqo", status: draft, note: "[Decide] keep Latin 'Ekqo' or give a Burmese-script spelling" }
+  grandma:      { text: ဖွားဖွား, roman: "Phwa Phwa" }
+  grandpa:      { text: ဖိုးဖိုး, roman: "Pho Pho" }
+  parent:       { text: { female: မေမေ, male: ဖေဖေ }, status: draft, note: "What the child calls them; chosen at profile setup" }
+  cousin:       { text: သီဟ, roman: "Thiha" }
+  neighbor:     { text: ဒေါ်ခင်ခင်, roman: "Daw Khin Khin" }
+  shopkeeper:   { text: ဦးထွန်း, roman: "U Tun" }
+  baker:        { text: ဒေါ်မြ, roman: "Daw Mya" }
+  fruit_seller: { text: null, status: missing, note: "Edition chooses" }
+  veg_seller:   { text: null, status: missing, note: "Edition chooses" }
+
+review:
+  word_lists: { status: approved, by: Kyaw, on: 2026-11-15 }
+  native_speaker_release_review: pending

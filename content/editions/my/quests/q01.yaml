@@ -1,0 +1,23 @@
+# Q1 is the worked example: every spoken step has its Burmese line.
+# Lines are built from the approved words and patterns but the sentences
+# themselves are new, so they are marked draft until a native speaker reviews them.
+schema: ekqo.edition-quest/1
+edition: my
+quest: q01
+say: [greet.hello, word.name, ans.yes, ans.no, greet.bye]
+hear: [q.who, nature.light, sky.star, time.night, place.garden, phrase.dont_be_scared]
+lines:
+  whisper_hello:  { text: "မင်္ဂလာပါ...", status: draft }
+  who:            { text: "ဘယ်သူလဲ", status: draft }
+  say_hello:      { accept: [မင်္ဂလာပါ], status: draft }
+  # ekqo_name and ask_name are generated from pat.my_name_is / pat.whats_your_name
+  say_name:       { accept_from_pattern: true, status: draft }
+  dont_be_scared: { text: "မကြောက်နဲ့", status: draft }
+  say_scared:
+    prompt: "ကြောက်လား"
+    support: "Are you scared?"
+    accept: [ဟုတ်ကဲ့, မဟုတ်ဘူး, ကြောက်တယ်, မကြောက်ဘူး]
+    status: draft
+    note: "Natural answers are ကြောက်တယ် / မကြောက်ဘူး; the approved list teaches ဟုတ်ကဲ့ / မဟုတ်ဘူး, so both are accepted. Reviewer to confirm."
+  fell_from_sky:  { text: "ကောင်းကင်ပေါ်က ကျလာတာ... ကြယ်တွေဆီက...", support: "I fell from the sky... from the stars...", status: draft }
+  say_bye:        { prompt: "အိပ်ချင်တယ်...", support: "I'm sleepy...", accept: [တာ့တာ, အိပ်တော့], status: draft }

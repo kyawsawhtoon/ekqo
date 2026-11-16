@@ -1,0 +1,6 @@
+schema: ekqo.edition-quest/1
+edition: my
+quest: q02
+say: [feel.hungry, verb.eat, verb.drink, food.rice, food.bread, food.fruit, drink.water, drink.milk]
+hear: [feel.thirsty, food.egg, food.soup, taste.tasty, taste.spicy, taste.sour]
+lines: {}        # TODO: Burmese lines for this quest's line and say/use steps (drafted offline, native-speaker reviewed)

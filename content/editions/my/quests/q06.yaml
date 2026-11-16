@@ -1,0 +1,6 @@
+schema: ekqo.edition-quest/1
+edition: my
+quest: q06
+say: [verb.play, verb.run, verb.jump, verb.hide, verb.find, toy.ball, phrase.again]
+hear: [people.friend, family.cousin, game.hide_and_seek, feel.happy, phrase.turn, num.1, num.2, num.3, num.4, num.5]
+lines: {}        # TODO: Burmese lines for this quest's line and say/use steps (drafted offline, native-speaker reviewed)

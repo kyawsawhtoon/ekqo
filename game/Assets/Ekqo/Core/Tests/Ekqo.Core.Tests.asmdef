@@ -1,0 +1,14 @@
+{
+    "name": "Ekqo.Core.Tests",
+    "rootNamespace": "Ekqo.Core.Tests",
+    "references": ["Ekqo.Core"],
+    "includePlatforms": ["Editor"],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": ["nunit.framework.dll"],
+    "autoReferenced": false,
+    "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

@@ -1,0 +1,62 @@
+# "Getting to know Ekqo" discoveries for the MVP. Storyboard 7, 9.3 and 10.5.
+# Each one adds a page to the About Ekqo section of the word book.
+# trigger.kind: quest_step (scripted), care_reaction (from a care action), ask (child asks Ekqo).
+schema: ekqo.discoveries/1
+
+discoveries:
+  - id: ekqo.name
+    category: identity
+    meaning: "His name is Ekqo"
+    trigger: { kind: quest_step, quest: q01, step: ekqo_name }
+  - id: ekqo.fav_food
+    category: favorite_food
+    meaning: "Sour fruit is his favorite; he puckers his face and asks for more"
+    concepts: [fruit.sour, taste.sour]
+    trigger: { kind: care_reaction, action: feed, item: fruit.sour, first_seen_in: q02 }
+  - id: ekqo.dislike_spicy
+    category: food_disliked
+    meaning: "He dislikes anything spicy; his glow turns red"
+    concepts: [taste.spicy]
+    trigger: { kind: care_reaction, action: feed, item: food.spicy_dish, first_seen_in: q02 }
+  - id: ekqo.loves_bubbles
+    category: makes_him_happy
+    meaning: "He loves soap bubbles"
+    concepts: [thing.bubbles]
+    trigger: { kind: quest_step, quest: q03, step: bubbles }
+  - id: ekqo.hums_eating
+    category: funny_habit
+    meaning: "He hums when he eats"
+    trigger: { kind: quest_step, quest: q04, step: dinner_hum }
+  - id: ekqo.sleeps_upside_down
+    category: funny_habit
+    meaning: "He sleeps upside down"
+    trigger: { kind: quest_step, quest: q04, step: tuck_in }
+  - id: ekqo.fav_game
+    category: favorite_game
+    meaning: "Hide-and-seek, and he always hides somewhere that glows"
+    concepts: [game.hide_and_seek]
+    trigger: { kind: quest_step, quest: q06, step: found_ekqo }
+  - id: ekqo.scared_cleaner
+    category: scares_him
+    meaning: "He is scared of the floor-cleaning machine (and the vacuum at home)"
+    trigger: { kind: quest_step, quest: q07, step: cleaner_hides }
+  - id: ekqo.loves_music
+    category: makes_him_happy
+    meaning: "He loves music and being sung to"
+    concepts: [thing.song]
+    trigger: { kind: quest_step, quest: q08, step: baker_sings }
+  - id: ekqo.memory_home
+    category: memory_of_home
+    meaning: "The sour fruit reminds him of a glowing fruit from the Cloud Meadow"
+    concepts: [fruit.sour]
+    trigger: { kind: quest_step, quest: q10, step: sky_fruit_memory }
+  - id: ekqo.scared_thunder
+    category: scares_him
+    meaning: "He is scared of thunder"
+    concepts: [weather.thunder, feel.scared]
+    trigger: { kind: quest_step, quest: q11, step: storm_hides }
+  - id: ekqo.fav_place
+    category: favorite_place
+    meaning: "The park at night, where he can see the sky"
+    concepts: [place.park, time.night]
+    trigger: { kind: quest_step, quest: q12, step: favorite_place }

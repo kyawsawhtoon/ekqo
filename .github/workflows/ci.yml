@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  content-and-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Validate content
+        run: pnpm content:validate
+      - name: Build content bundles
+        run: pnpm content:build
+      - run: pnpm typecheck
+      - run: pnpm test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: content-bundles
+          path: build/content

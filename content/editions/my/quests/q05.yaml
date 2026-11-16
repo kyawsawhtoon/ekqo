@@ -1,0 +1,6 @@
+schema: ekqo.edition-quest/1
+edition: my
+quest: q05
+say: [place.shop, place.park, place.market, dir.left, dir.right, dir.straight]
+hear: [place.street, place.house, place.bakery, dir.here, dir.there, dir.near, dir.far]
+lines: {}        # TODO: Burmese lines for this quest's line and say/use steps (drafted offline, native-speaker reviewed)

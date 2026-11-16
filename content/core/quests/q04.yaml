@@ -1,0 +1,33 @@
+# Q4. Meet the Family (Chapter 1 finale). Storyboard 10.2.
+schema: ekqo.quest/1
+id: q04
+chapter: ch1
+title: "Meet the Family"
+location: house.living_room
+characters: [ekqo, grandma, grandpa, parent]
+function: "Introducing people; asking and saying how you are"
+topics: [family.mother, family.father, family.grandma, family.grandpa, family.family, phrase.how_are_you, phrase.im_fine, feel.sleepy, thing.bed, phrase.good_night]
+patterns: [pat.this_is]
+listening_weight: normal
+reuses: [q01, q02, q03]
+care: { unlocks: sleep }
+discoveries: [ekqo.hums_eating, ekqo.sleeps_upside_down]
+ekqo: { stage_on_complete: 2 }
+rewards: [badge_ch1, outfit_ch1]
+unlocks: [location:street]
+steps:
+  - { id: dinner,       type: scene, meaning: "Dinner. Ekqo is shy, so the child introduces everyone to him one by one." }
+  - { id: teach_family, type: teach, concepts: [family.mother, family.father, family.grandma, family.grandpa, phrase.how_are_you, phrase.im_fine], patterns: [pat.this_is] }
+  - { id: introduce,    type: use, speaker: ekqo, repeat: 3, meaning: "The child introduces three family members to Ekqo.", expects: { intent: "introduces a family member", pattern: pat.this_is }, ai: { npc_vary: true, judge: meaning } }
+  - { id: welcome,      type: line, speaker: grandma, meaning: "Welcome!", concepts: [phrase.welcome] }
+  - { id: how_are_you,  type: say, speaker: grandpa, meaning: "Grandpa asks the child how they are. The child answers.", expects: { intent: "says they are well", concepts: [phrase.im_fine] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: grandpa_joke, type: scene, meaning: "Grandpa tells a joke." }
+  - { id: dinner_hum,   type: scene, meaning: "Ekqo hums while he eats." }
+  - { id: discover_hum, type: discover, discovery: ekqo.hums_eating }
+  - { id: bedtime,      type: care, action: sleep, first_time: true, meaning: "Bedtime. Sleep unlocks." }
+  - { id: say_good_night, type: say, speaker: ekqo, meaning: "The child says good night.", expects: { intent: "says good night", concepts: [phrase.good_night] }, ai: { npc_vary: false, judge: meaning } }
+  - { id: tuck_in,      type: scene, meaning: "Ekqo flips over to sleep upside down." }
+  - { id: discover_upside, type: discover, discovery: ekqo.sleeps_upside_down }
+  - { id: grow,         type: stage, stage: 2, meaning: "All the kind words make Ekqo grow. He can float now; the neighborhood map unlocks." }
+  - { id: review,       type: review }
+  - { id: reward,       type: reward, items: [badge_ch1, outfit_ch1] }

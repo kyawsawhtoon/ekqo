@@ -1,0 +1,55 @@
+# Q1. A Light in the Garden. Storyboard 10.2.
+schema: ekqo.quest/1
+id: q01
+chapter: ch1
+title: "A Light in the Garden"
+location: house.garden
+time_of_day: night
+characters: [ekqo]
+function: "Greeting; saying your name; yes and no"
+topics: [greet.hello, word.name, q.who, ans.yes, ans.no, nature.light, sky.star, time.night, place.garden, phrase.dont_be_scared, greet.bye]
+patterns: [pat.my_name_is, pat.whats_your_name]
+listening_weight: heavy          # Q1-Q3 lean on hear/show/echo with short answers
+reuses: []
+discoveries: [ekqo.name]
+ekqo: { stage_on_start: 1, abilities: [word_book, hint_glow] }
+rewards: [glow_jar]
+steps:
+  - { id: light_falls,  type: scene, meaning: "First night of the visit. A light falls into Grandma's garden." }
+  - { id: whisper_hello, type: line, speaker: ekqo, meaning: "(from under the bushes, very quietly) Hello...", concepts: [greet.hello] }
+  - { id: who,          type: line, speaker: ekqo, meaning: "Who is it?", concepts: [q.who] }
+  - id: teach_greeting
+    type: teach
+    concepts: [greet.hello, ans.yes, ans.no]
+  - id: say_hello
+    type: say
+    speaker: ekqo
+    meaning: "Ekqo waits for the child to say hello back."
+    expects: { intent: "greets Ekqo", concepts: [greet.hello] }
+    ai: { npc_vary: false, judge: meaning }
+    on_success: { effect: ekqo_glow_up }
+  - { id: ekqo_name,    type: line, speaker: ekqo, meaning: "My name is Ekqo.", pattern: pat.my_name_is, fill: { x: "{ekqo}" } }
+  - { id: discover_name, type: discover, discovery: ekqo.name }
+  - { id: ask_name,     type: line, speaker: ekqo, meaning: "What is your name?", pattern: pat.whats_your_name }
+  - id: teach_name
+    type: teach
+    concepts: [word.name]
+    patterns: [pat.my_name_is]
+  - id: say_name
+    type: say
+    speaker: ekqo
+    meaning: "The child says their name."
+    expects: { intent: "says their own name", pattern: pat.my_name_is, slot_values: { x: "{player_name}" } }
+    ai: { npc_vary: true, judge: meaning }
+  - { id: dont_be_scared, type: line, speaker: ekqo, meaning: "Don't be scared.", concepts: [phrase.dont_be_scared] }
+  - id: say_scared
+    type: say
+    speaker: ekqo
+    meaning: "Ekqo asks: are you scared? The child answers yes or no."
+    expects: { intent: "answers yes or no", any_of: [ans.yes, ans.no] }
+    ai: { npc_vary: false, judge: meaning }
+  - { id: fell_from_sky, type: line, speaker: ekqo, meaning: "(very sleepily) I fell... from the sky. From the stars.", concepts: [sky.star, nature.light] }
+  - { id: word_book,    type: reward, items: [], abilities: [word_book], meaning: "The child gets the word book." }
+  - { id: say_bye,      type: say, speaker: ekqo, meaning: "Ekqo yawns. The child says bye for tonight.", expects: { intent: "says bye or good night", any_of: [greet.bye] }, ai: { npc_vary: false, judge: meaning } }
+  - { id: review,       type: review }
+  - { id: reward,       type: reward, items: [glow_jar] }

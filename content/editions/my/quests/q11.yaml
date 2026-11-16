@@ -1,0 +1,6 @@
+schema: ekqo.edition-quest/1
+edition: my
+quest: q11
+say: [feel.happy, feel.sad, feel.scared, verb.like, verb.dont_like, sky.star]
+hear: [feel.tired, sky.moon, sky.sky, sky.cloud, weather.rain, weather.thunder, feel.miss]
+lines: {}        # TODO: Burmese lines for this quest's line and say/use steps (drafted offline, native-speaker reviewed)

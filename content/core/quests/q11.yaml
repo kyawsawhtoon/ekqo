@@ -1,0 +1,28 @@
+# Q11. Grandpa's Stars. Storyboard 10.4.
+schema: ekqo.quest/1
+id: q11
+chapter: ch3
+title: "Grandpa's Stars"
+location: house.garden
+time_of_day: night
+characters: [ekqo, grandpa]
+function: "Saying how you feel; asking and saying what you like and don't like"
+topics: [feel.happy, feel.sad, feel.scared, feel.tired, verb.like, verb.dont_like, sky.star, sky.moon, sky.sky, sky.cloud, weather.rain, weather.thunder, feel.miss]
+patterns: [pat.do_you_like, pat.i_like, pat.i_dont_like, pat.are_you_feeling]
+listening_weight: normal
+reuses: [q01, q02, q04, q09]
+discoveries: [ekqo.scared_thunder]
+rewards: [star_map]
+music: star_tune
+steps:
+  - { id: storm,        type: scene, meaning: "A storm comes. Ekqo hides, shaking at every thunderclap." }
+  - { id: storm_hides,  type: discover, discovery: ekqo.scared_thunder }
+  - { id: teach_feelings, type: teach, concepts: [feel.happy, feel.sad, feel.scared, verb.like, verb.dont_like, sky.star], patterns: [pat.do_you_like, pat.are_you_feeling] }
+  - { id: ask_feel,     type: use, speaker: ekqo, meaning: "The child asks Ekqo how he feels.", expects: { intent: "asks Ekqo if he is scared/sad/okay", pattern: pat.are_you_feeling }, ai: { npc_vary: true, judge: meaning } }
+  - { id: comfort,      type: care, action: comfort, meaning: "The child comforts him." }
+  - { id: stars,        type: scene, meaning: "The sky clears. Grandpa takes them out to look at the stars and tells an old story about a bridge of light that reaches the sky. Ekqo realizes it could take him home." }
+  - { id: ask_likes,    type: use, speaker: ekqo, repeat: 2, meaning: "The child asks Ekqo what he likes about his home.", expects: { intent: "asks if Ekqo likes something", pattern: pat.do_you_like }, ai: { npc_vary: true, judge: meaning } }
+  - { id: own_likes,    type: say, speaker: grandpa, meaning: "Grandpa asks the child what they like. The child answers.", expects: { intent: "says what they like or don't like", patterns_any: [pat.i_like, pat.i_dont_like] }, ai: { npc_vary: true, judge: meaning } }
+  - { id: bedtime,      type: care, action: sleep, meaning: "Bedtime." }
+  - { id: review,       type: review }
+  - { id: reward,       type: reward, items: [star_map] }

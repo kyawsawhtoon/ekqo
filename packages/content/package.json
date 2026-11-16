@@ -1,0 +1,19 @@
+{
+  "name": "@ekqo/content",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Ekqo content schema, validator and compiler",
+  "exports": {
+    ".": "./src/schema.ts",
+    "./bundle": "./src/bundle.ts"
+  },
+  "scripts": {
+    "validate": "tsx src/validate.ts ../../content --report ../../content/VALIDATION.md",
+    "build": "tsx src/validate.ts ../../content && tsx src/compile.ts ../../content ../../build/content",
+    "typecheck": "tsc -p .",
+    "test": "tsx src/validate.ts ../../content"
+  },
+  "dependencies": { "yaml": "^2.6.0", "zod": "^3.23.8" },
+  "devDependencies": { "@types/node": "^22.0.0", "tsx": "^4.19.0", "typescript": "^5.6.0" }
+}

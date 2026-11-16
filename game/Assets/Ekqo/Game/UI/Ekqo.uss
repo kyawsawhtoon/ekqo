@@ -1,0 +1,26 @@
+/* All Ekqo text uses UI Toolkit's Advanced Text Generator (HarfBuzz + ICU), which
+   shapes Myanmar script. TextMeshPro is not used for Burmese (architecture 9.1).
+   The font must be a dynamic font asset made from Noto Sans Myanmar. */
+:root {
+    -unity-text-generator: advanced;
+    -unity-font-definition: url("project://database/Assets/Ekqo/Game/Fonts/NotoSansMyanmar-Regular.asset");
+    color: rgb(40, 30, 60);
+}
+
+.dialogue {
+    position: absolute;
+    left: 5%; right: 5%; bottom: 4%;
+    padding: 24px 32px;
+    border-radius: 24px;
+    background-color: rgba(255, 250, 235, 0.96);
+}
+
+.dialogue__speaker { font-size: 26px; -unity-font-style: bold; margin-bottom: 6px; }
+.dialogue__text    { font-size: 40px; white-space: normal; }
+.dialogue__support { font-size: 24px; color: rgb(110, 100, 130); margin-top: 8px; }
+/* Highlight words with element backgrounds: <mark> is not supported by the advanced generator. */
+.word--target      { background-color: rgba(255, 214, 102, 0.6); border-radius: 8px; }
+
+.spike-row         { flex-direction: row; padding: 8px 16px; border-bottom-width: 1px; border-color: rgb(220, 215, 200); }
+.spike-row__id     { width: 280px; font-size: 18px; color: rgb(120, 120, 120); }
+.spike-row__text   { font-size: 36px; }

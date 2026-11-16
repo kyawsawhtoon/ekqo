@@ -1,0 +1,6 @@
+schema: ekqo.edition-quest/1
+edition: my
+quest: q10
+say: [fruit.banana, fruit.apple, fruit.mango, fruit.orange, q.how_much, phrase.ill_buy]
+hear: [fruit.grapes, num.6, num.7, num.8, num.9, num.10, x.my.classifier_round]
+lines: {}        # TODO: Burmese lines for this quest's line and say/use steps (drafted offline, native-speaker reviewed)
