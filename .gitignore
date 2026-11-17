@@ -28,3 +28,7 @@ game/ServerData/
 # OS
 .DS_Store
 Thumbs.db
+game/.vscode/
+game/*.slnx
+game/*.sln
+game/*.csproj
