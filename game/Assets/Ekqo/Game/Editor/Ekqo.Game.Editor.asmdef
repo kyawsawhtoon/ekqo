@@ -1,0 +1,14 @@
+{
+    "name": "Ekqo.Game.Editor",
+    "rootNamespace": "Ekqo.Game.Editor",
+    "references": ["Ekqo.Game"],
+    "includePlatforms": ["Editor"],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

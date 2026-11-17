@@ -24,3 +24,6 @@
 .spike-row         { flex-direction: row; padding: 8px 16px; border-bottom-width: 1px; border-color: rgb(220, 215, 200); }
 .spike-row__id     { width: 280px; font-size: 18px; color: rgb(120, 120, 120); }
 .spike-row__text   { font-size: 36px; }
+.spike-title       { padding: 16px; font-size: 22px; white-space: normal; background-color: rgb(255, 236, 179); }
+.spike-title, .spike-row__id, .spike-row__text { -unity-text-generator: advanced; }
+.spike-row__text   { flex-shrink: 1; white-space: normal; }

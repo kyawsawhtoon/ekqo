@@ -32,3 +32,6 @@ game/.vscode/
 game/*.slnx
 game/*.sln
 game/*.csproj
+
+# Web builds published by GitHub Pages (the "build/" rule above would hide Unity's Build/ folder on Mac and Windows)
+!site/**/Build/

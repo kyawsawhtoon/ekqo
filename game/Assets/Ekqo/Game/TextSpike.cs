@@ -9,17 +9,29 @@ namespace Ekqo.Game
     /// <summary>
     /// Week-1 spike (architecture 9.4): renders every lexicon entry and pattern template
     /// with the Advanced Text Generator so a native speaker can check Burmese shaping on
-    /// iPad Safari and Android Chrome. Put on a GameObject with a UIDocument using Ekqo.uss.
+    /// iPad Safari and Android Chrome. The Ekqo menu → "Build Burmese text test" makes the
+    /// scene and the web build (see Editor/TextTestBuilder.cs).
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
     public sealed class TextSpike : MonoBehaviour
     {
         [SerializeField] private string edition = "my";
+        [Tooltip("Noto Sans Myanmar. Set directly so the test does not depend on a generated font asset.")]
+        [SerializeField] private Font font;
+        [SerializeField] private StyleSheet styles;
 
         private IEnumerator Start()
         {
             var root = GetComponent<UIDocument>().rootVisualElement;
-            var scroll = new ScrollView();
+            if (styles != null) root.styleSheets.Add(styles);
+            if (font != null) root.style.unityFontDefinition = FontDefinition.FromFont(font);
+            root.style.backgroundColor = new Color(1f, 0.98f, 0.92f);
+
+            var title = new Label("Ekqo Burmese text test. Read every line. If one looks wrong, note its grey name.");
+            title.AddToClassList("spike-title");
+            root.Add(title);
+
+            var scroll = new ScrollView(ScrollViewMode.Vertical);
             scroll.style.flexGrow = 1;
             root.Add(scroll);
 
@@ -33,6 +45,7 @@ namespace Ekqo.Game
             }
 
             var bundle = ContentLoader.Parse(req.downloadHandler.text);
+            title.text += $"  (content {bundle.Version})";
             foreach (var e in bundle.Edition.Lexicon.Entries) scroll.Add(Row(e.Concept, e.Text));
             foreach (var p in bundle.Edition.Patterns.Patterns) scroll.Add(Row(p.Id, p.Template));
             foreach (var q in bundle.Edition.Quests)
