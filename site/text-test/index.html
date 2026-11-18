@@ -1,7 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not built yet</title></head>
-<body style="font: 20px system-ui, sans-serif; padding: 32px 16px;">
-  The Burmese text test has not been built yet. In Unity: Ekqo → Build Burmese text test, then push.
+<html lang="my">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Ekqo</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #1b1d3a; overflow: hidden; touch-action: none; }
+    #unity-canvas { width: 100%; height: 100%; display: block; }
+    #start { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+             font: 600 28px system-ui, sans-serif; color: #fff7d6; background: #1b1d3a; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <!-- Browsers start audio only after a tap, so the game begins with one. -->
+  <div id="start">▶</div>
+  <!-- Azure AI Speech SDK for JavaScript. Pin and review the version before release. -->
+  <script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@1.40.0/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle-min.js"></script>
+  <script src="ekqo-speech.js"></script>
+  <script src="Build/text-test.loader.js"></script>
+  <script>
+    document.getElementById("start").addEventListener("click", function (e) {
+      e.currentTarget.remove();
+      createUnityInstance(document.getElementById("unity-canvas"), {
+        dataUrl: "Build/text-test.data.unityweb",
+        frameworkUrl: "Build/text-test.framework.js.unityweb",
+        codeUrl: "Build/text-test.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "EkQo",
+        productVersion: "1.0",
+      }).then(function (instance) { window.unityInstance = instance; });
+    }, { once: true });
+  </script>
 </body>
 </html>
