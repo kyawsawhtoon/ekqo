@@ -3,7 +3,9 @@
    The font must be a dynamic font asset made from Noto Sans Myanmar. */
 :root {
     -unity-text-generator: advanced;
-    -unity-font-definition: url("project://database/Assets/Ekqo/Game/Fonts/NotoSansMyanmar-Regular.asset");
+    /* Turn back on once the font asset exists (game/README.md step 6). Until then a URL to a
+       missing asset can stop this stylesheet loading; TextSpike sets the font in code. */
+    /* -unity-font-definition: url("project://database/Assets/Ekqo/Game/Fonts/NotoSansMyanmar-Regular.asset"); */
     color: rgb(40, 30, 60);
 }
 
