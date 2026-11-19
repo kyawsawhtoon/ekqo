@@ -47,7 +47,8 @@ namespace Ekqo.Game
             root.style.position = Position.Absolute;
             root.style.left = 0; root.style.top = 0; root.style.right = 0; root.style.bottom = 0;
             if (styles != null) root.styleSheets.Add(styles);
-            if (font != null) root.style.unityFontDefinition = FontDefinition.FromFont(font);
+            // Noto Sans Myanmar has no Latin letters, so it goes on the Burmese text only
+            // (see Row). The title and row names keep the theme's default font.
             root.style.backgroundColor = new Color(1f, 0.98f, 0.92f);
 
             var title = new Label("Ekqo Burmese text test. Read every line. If one looks wrong, note its grey name.");
@@ -78,7 +79,7 @@ namespace Ekqo.Game
             Debug.Log($"[TextSpike] Showing {scroll.contentContainer.childCount} rows.");
         }
 
-        private static VisualElement Row(string id, string text)
+        private VisualElement Row(string id, string text)
         {
             var row = new VisualElement();
             row.AddToClassList("spike-row");
@@ -86,6 +87,7 @@ namespace Ekqo.Game
             idLabel.AddToClassList("spike-row__id");
             var textLabel = new Label(text);
             textLabel.AddToClassList("spike-row__text");
+            if (font != null) textLabel.style.unityFontDefinition = FontDefinition.FromFont(font);
             row.Add(idLabel);
             row.Add(textLabel);
             return row;
