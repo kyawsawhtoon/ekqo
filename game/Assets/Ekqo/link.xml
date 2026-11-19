@@ -1,0 +1,5 @@
+<!-- Keep the content and save models: Newtonsoft builds them by reflection, which the
+     code stripper cannot see. -->
+<linker>
+  <assembly fullname="Ekqo.Core" preserve="all"/>
+</linker>

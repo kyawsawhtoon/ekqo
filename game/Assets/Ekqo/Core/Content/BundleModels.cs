@@ -107,7 +107,10 @@ namespace Ekqo.Core.Content
         public List<string> Abilities = new List<string>();
         public int? Sparks;
         public List<string> Friends = new List<string>();
+        public OnSuccess OnSuccess;    // say/use: what the game shows after a right answer
     }
+
+    public sealed class OnSuccess { public string Effect; }
 
     public sealed class Expects
     {
@@ -147,7 +150,10 @@ namespace Ekqo.Core.Content
         public List<EditionQuest> Quests = new List<EditionQuest>();
     }
 
-    public sealed class EditionInfo { public string Id; public string Name; public string NativeName; public string Locale; public string Script; public string SupportLanguage; public FontInfo Font; }
+    public sealed class EditionInfo { public string Id; public string Name; public string NativeName; public string Locale; public string Script; public string SupportLanguage; public FontInfo Font; public Dictionary<string, CharacterName> Names = new Dictionary<string, CharacterName>(); }
+
+    /// <summary>A character's name in this edition. Text is a string, or an object keyed by gender (parent).</summary>
+    public sealed class CharacterName { public object Text; public string Roman; public string Status; }
     public sealed class FontInfo { public string Family; public bool Bundled; }
     public sealed class Lexicon { public List<LexiconEntry> Entries = new List<LexiconEntry>(); }
     public sealed class LexiconEntry { public string Concept; public string Text; public string Roman; public string Stem; public string Classifier; public bool Local; public string Gloss; public string Status; }

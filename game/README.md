@@ -46,6 +46,37 @@ the scene to try it with Play.
 The test uses the committed `Assets/StreamingAssets/content/my/bundle.json`. After
 content changes, run `pnpm content:build` and copy the new bundle there (see Content).
 
+## Quest 1 on tablets
+
+Quest 1 ("A Light in the Garden") is the first playable slice: Ekqo in the night garden,
+listen-first teaching (hear, tap the picture, say it with Ekqo), the say steps with tap
+answers, the end-of-quest review, the word book and the glowing jar. It runs on the
+quest engine and the Burmese content bundle. The code is in `Assets/Ekqo/Game/Quest`.
+
+1. Open `game/` in Unity and wait for it to finish compiling. The Console should have no red lines.
+2. To try it in the editor: **Ekqo → Play Quest 1 here** (press Play again to stop). The
+   editor has no voice, and the child's name is "Su".
+3. For tablets: **Ekqo → Build Quest 1 for tablets**. It writes the web build to `site/quest1/`.
+4. Commit and push it, the same way as the text test.
+5. A few minutes later, open https://kyawsawhtoon.github.io/ekqo/quest1/ on the tablet.
+   The bottom-left corner shows the build time, so you can tell a new build from a cached one.
+
+**Answers are taps for now.** Each say step shows the right phrase and one other phrase.
+The child says it out loud and taps it. Speech recognition plugs in here later (architecture 4.2).
+
+**Voice.** The game plays a recorded clip when one exists, then the browser's own Burmese
+voice if the tablet has one, and otherwise shows the line without sound. To add clips, put
+MP3s in `Assets/StreamingAssets/voice/my/` named by step or word, such as `q01/who.mp3` or
+`word/greet.hello.mp3`, and list them in `Assets/StreamingAssets/voice/my/voice.json`:
+
+```json
+{ "clips": ["q01/who", "word/greet.hello"] }
+```
+
+The "English help" button in the top corner shows or hides the English hints for grown-ups.
+Progress is saved in the browser at the end of the quest. "Start over as a new player" on
+the last screen clears it.
+
 ## Layout
 
 | Folder | Assembly | Workstream | Notes |
@@ -53,9 +84,10 @@ content changes, run `pnpm content:build` and copy the new bundle there (see Con
 | `Assets/Ekqo/Core` | `Ekqo.Core` | 4 | Quest engine. Pure C# (`noEngineReferences`), tests in `Core/Tests` |
 | `Assets/Ekqo/Content` | `Ekqo.Content` | 6 | Loads `bundle.json` into the Core models |
 | `Assets/Ekqo/Speech` | `Ekqo.Speech` | 3 | `ISpeechService` and the web bridge |
-| `Assets/Ekqo/Game` | `Ekqo.Game` | 1 | Bootstrap, UI Toolkit styles, the week-1 text spike |
+| `Assets/Ekqo/Game` | `Ekqo.Game` | 1 | Bootstrap, UI Toolkit styles, the week-1 text spike, Quest 1 (`Quest/`) |
 | `Assets/Plugins/WebGL` | | 3 | `EkqoSpeech.jslib` (Unity ↔ browser) |
 | `Assets/WebGLTemplates/Ekqo` | | 1, 3 | Page template with tap-to-start and the Azure Speech JS SDK |
+| `Assets/WebGLTemplates/EkqoQuest` | | 1 | Quest 1 page: the child's nickname, tap-to-start, loading progress |
 
 ## Content
 
@@ -64,4 +96,4 @@ Run `pnpm content:build` at the repo root and copy `build/content/my/bundle.json
 
 ## Tests
 
-Window → General → Test Runner → EditMode → Run All (the `Ekqo.Core.Tests` assembly).
+Window → General → Test Runner → EditMode → Run All (the `Ekqo.Core.Tests` assembly: the quest engine and `LineText`, which fills lines, patterns and tap answers from the content).
