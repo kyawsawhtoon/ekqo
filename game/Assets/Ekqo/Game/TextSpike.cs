@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Text.RegularExpressions;
 using Ekqo.Content;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -85,12 +86,37 @@ namespace Ekqo.Game
             row.AddToClassList("spike-row");
             var idLabel = new Label(id);
             idLabel.AddToClassList("spike-row__id");
-            var textLabel = new Label(text);
-            textLabel.AddToClassList("spike-row__text");
-            if (font != null) textLabel.style.unityFontDefinition = FontDefinition.FromFont(font);
             row.Add(idLabel);
-            row.Add(textLabel);
+
+            // Pattern templates hold slots like {x} that the game fills with a word. Noto Sans
+            // Myanmar has no Latin letters, so slots are drawn as chips in the default font
+            // instead of empty boxes.
+            var line = new VisualElement();
+            line.AddToClassList("spike-row__line");
+            var last = 0;
+            foreach (Match m in Slot.Matches(text))
+            {
+                AddBurmese(line, text.Substring(last, m.Index - last));
+                var slot = new Label(m.Value.Trim('{', '}'));
+                slot.AddToClassList("spike-row__slot");
+                line.Add(slot);
+                last = m.Index + m.Length;
+            }
+            AddBurmese(line, text.Substring(last));
+            row.Add(line);
             return row;
+        }
+
+        private static readonly Regex Slot = new Regex(@"\{[^}]*\}");
+
+        private void AddBurmese(VisualElement line, string part)
+        {
+            part = part.Trim();
+            if (part.Length == 0) return;
+            var label = new Label(part);
+            label.AddToClassList("spike-row__text");
+            if (font != null) label.style.unityFontDefinition = FontDefinition.FromFont(font);
+            line.Add(label);
         }
     }
 }
