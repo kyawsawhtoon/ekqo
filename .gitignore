@@ -1,37 +1,8 @@
-# Node
-node_modules/
-dist/
-*.log
-.env
-.env.*
-!.env.example
-
-# Content build output
-build/
-
-# Unity
 game/[Ll]ibrary/
 game/[Tt]emp/
 game/[Oo]bj/
-game/[Bb]uild/
-game/[Bb]uilds/
 game/[Ll]ogs/
+game/[Bb]uild/
 game/[Uu]ser[Ss]ettings/
-game/[Mm]emoryCaptures/
 game/*.csproj
 game/*.sln
-game/*.unityproj
-game/.vs/
-game/.idea/
-game/ServerData/
-
-# OS
-.DS_Store
-Thumbs.db
-game/.vscode/
-game/*.slnx
-game/*.sln
-game/*.csproj
-
-# Web builds published by GitHub Pages (the "build/" rule above would hide Unity's Build/ folder on Mac and Windows)
-!site/**/Build/
