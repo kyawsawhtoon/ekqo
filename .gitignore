@@ -8,3 +8,6 @@ game/*.csproj
 game/*.sln
 .DS_Store
 * 2.*
+# Made fresh by Ekqo → Build Quest 1 for tablets / Play Quest 1 here
+game/Assets/Ekqo/Game/Quest/Quest1.unity
+game/Assets/Ekqo/Game/Quest/Quest1.unity.meta
