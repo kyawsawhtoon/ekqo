@@ -16,8 +16,8 @@ namespace Ekqo.Game.Editor
     {
         private const string Folder = "Assets/Ekqo/Game/TextTest";
         private const string ScenePath = Folder + "/TextTest.unity";
-        private const string PanelPath = Folder + "/TextTestPanel.asset";
-        private const string ThemePath = Folder + "/TextTestTheme.tss";
+        private const string PanelPath = Folder + "/Resources/TextTestPanel.asset";
+        private const string ThemePath = Folder + "/Resources/TextTestTheme.tss";
         private const string FontPath = "Assets/Ekqo/Game/Fonts/NotoSansMyanmar-Regular.ttf";
         private const string StylesPath = "Assets/Ekqo/Game/UI/Ekqo.uss";
         private const string BundlePath = "Assets/StreamingAssets/content/my/bundle.json";

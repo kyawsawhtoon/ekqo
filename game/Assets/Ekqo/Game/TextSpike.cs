@@ -20,9 +20,32 @@ namespace Ekqo.Game
         [SerializeField] private Font font;
         [SerializeField] private StyleSheet styles;
 
+        private void Awake()
+        {
+            // The first web build drew nothing because the scene had lost its panel settings
+            // and stylesheet references. Load them from Resources so the test never depends
+            // on those references surviving a save.
+            var doc = GetComponent<UIDocument>();
+            if (doc.panelSettings == null)
+            {
+                Debug.Log("[TextSpike] No panel settings on the UIDocument, loading Resources/TextTestPanel.");
+                doc.panelSettings = Resources.Load<PanelSettings>("TextTestPanel");
+            }
+            if (styles == null) styles = Resources.Load<StyleSheet>("TextTestStyles");
+        }
+
         private IEnumerator Start()
         {
-            var root = GetComponent<UIDocument>().rootVisualElement;
+            var doc = GetComponent<UIDocument>();
+            Debug.Log($"[TextSpike] panel={(doc.panelSettings != null)} styles={(styles != null)} font={(font != null)}");
+            var root = doc.rootVisualElement;
+            if (root == null)
+            {
+                Debug.LogError("[TextSpike] The UIDocument has no root element, so nothing can be shown.");
+                yield break;
+            }
+            root.style.position = Position.Absolute;
+            root.style.left = 0; root.style.top = 0; root.style.right = 0; root.style.bottom = 0;
             if (styles != null) root.styleSheets.Add(styles);
             if (font != null) root.style.unityFontDefinition = FontDefinition.FromFont(font);
             root.style.backgroundColor = new Color(1f, 0.98f, 0.92f);
@@ -52,6 +75,7 @@ namespace Ekqo.Game
                 foreach (var kv in q.Lines)
                     if (!string.IsNullOrEmpty(kv.Value.Text ?? kv.Value.Prompt))
                         scroll.Add(Row($"{q.Quest}#{kv.Key}", kv.Value.Text ?? kv.Value.Prompt));
+            Debug.Log($"[TextSpike] Showing {scroll.contentContainer.childCount} rows.");
         }
 
         private static VisualElement Row(string id, string text)
