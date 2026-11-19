@@ -6,3 +6,5 @@ game/[Bb]uild/
 game/[Uu]ser[Ss]ettings/
 game/*.csproj
 game/*.sln
+.DS_Store
+* 2.*
