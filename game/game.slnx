@@ -1,8 +1,8 @@
 ﻿<Solution>
   <Project Path="Ekqo.Core.csproj" />
   <Project Path="Ekqo.Content.csproj" />
-  <Project Path="Ekqo.Speech.csproj" />
   <Project Path="Ekqo.Game.csproj" />
+  <Project Path="Ekqo.Speech.csproj" />
   <Project Path="Ekqo.Core.Tests.csproj" />
   <Project Path="Ekqo.Game.Editor.csproj" />
 </Solution>

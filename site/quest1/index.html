@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Ekqo · Quest 1</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #1b1d3a; overflow: hidden; touch-action: none;
+                 font-family: system-ui, -apple-system, "Noto Sans Myanmar", "Myanmar Sangam MN", sans-serif; }
+    #unity-canvas { width: 100%; height: 100%; display: block; }
+    #start { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+             gap: 18px; color: #fff7d6; background: #1b1d3a; padding: 16px; box-sizing: border-box; text-align: center; }
+    #start h1 { margin: 0; font-size: 34px; color: #ffd666; }
+    #start p { margin: 0; font-size: 18px; opacity: 0.85; max-width: 460px; }
+    #name { font-size: 26px; padding: 12px 18px; border-radius: 16px; border: 0; width: min(320px, 90vw);
+            text-align: center; background: #fffaeb; color: #281e3c; }
+    #go { font-size: 26px; font-weight: 700; padding: 14px 40px; border-radius: 22px; border: 0;
+          background: #ffd666; color: #281e3c; cursor: pointer; }
+    #go:disabled { opacity: 0.4; }
+    #loading { position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+               font: 600 22px system-ui, sans-serif; color: #fff7d6; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <!-- Grown-ups type the child's nickname here. It stays on this device (browser storage).
+       Browsers also start sound only after a tap, so the game begins with one. -->
+  <div id="start">
+    <h1>Ekqo</h1>
+    <p>Grown-ups: type your child's name or nickname, then tap Start. Turn the sound on.</p>
+    <input id="name" maxlength="20" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Name">
+    <button id="go" disabled>Start</button>
+  </div>
+  <div id="loading">Loading Ekqo… <span id="pct"></span></div>
+  <script src="Build/308221a5caa42e3e75562bf746118263.loader.js"></script>
+  <script>
+    var nameBox = document.getElementById("name");
+    var go = document.getElementById("go");
+    try { nameBox.value = localStorage.getItem("ekqo.playerName") || ""; } catch (e) { }
+    function check() { go.disabled = nameBox.value.trim().length === 0; }
+    nameBox.addEventListener("input", check);
+    nameBox.addEventListener("keydown", function (e) { if (e.key === "Enter" && !go.disabled) go.click(); });
+    check();
+
+    go.addEventListener("click", function () {
+      try { localStorage.setItem("ekqo.playerName", nameBox.value.trim()); } catch (e) { }
+      // iPad Safari speaks only after a tap: say nothing once now so later lines can play.
+      if (window.speechSynthesis) {
+        try { var u = new SpeechSynthesisUtterance(" "); u.volume = 0; speechSynthesis.speak(u); speechSynthesis.getVoices(); } catch (e) { }
+      }
+      nameBox.blur();
+      document.getElementById("start").remove();
+      var loading = document.getElementById("loading");
+      loading.style.display = "flex";
+      createUnityInstance(document.getElementById("unity-canvas"), {
+        dataUrl: "Build/516ebe1f26b691f5489c773526214471.data.unityweb",
+        frameworkUrl: "Build/4d601960eeef00f8900936322c3f1ae3.framework.js.unityweb",
+        codeUrl: "Build/08eef00465496db678f09c20e4648087.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "EkQo",
+        productVersion: "1.0",
+      }, function (progress) {
+        document.getElementById("pct").textContent = Math.round(progress * 100) + "%";
+      }).then(function (instance) {
+        window.unityInstance = instance;
+        loading.remove();
+      }).catch(function (message) {
+        loading.textContent = "Ekqo could not start: " + message;
+      });
+    }, { once: true });
+  </script>
+</body>
+</html>
