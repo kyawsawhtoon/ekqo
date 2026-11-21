@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -47,6 +48,10 @@ namespace Ekqo.Game.Editor
             var oldFallback = PlayerSettings.WebGL.decompressionFallback;
             var oldTemplate = PlayerSettings.WebGL.template;
             var oldHashes = PlayerSettings.WebGL.nameFilesAsHashes;
+            var web = NamedBuildTarget.WebGL;
+            var oldCodeGen = PlayerSettings.GetIl2CppCodeGeneration(web);
+            var oldCompiler = PlayerSettings.GetIl2CppCompilerConfiguration(web);
+            var oldDevelopment = EditorUserBuildSettings.development;
             var output = Path.GetFullPath(OutputFolder);
             try
             {
@@ -57,6 +62,14 @@ namespace Ekqo.Game.Editor
                 PlayerSettings.WebGL.decompressionFallback = true;
                 PlayerSettings.WebGL.template = Template;
                 PlayerSettings.WebGL.nameFilesAsHashes = true;
+                // The first Quest 1 build failed in the linker with "duplicate symbol" errors for
+                // shared generic code (ReadOnlySpan, PrimitivesConverters). That comes from IL2CPP's
+                // "faster (smaller) builds" code generation and its build cache. Build the
+                // standard way instead (optimize for speed, release, not a development build),
+                // and clean the cache each time, which costs a few extra minutes.
+                PlayerSettings.SetIl2CppCodeGeneration(web, Il2CppCodeGeneration.OptimizeSpeed);
+                PlayerSettings.SetIl2CppCompilerConfiguration(web, Il2CppCompilerConfiguration.Release);
+                EditorUserBuildSettings.development = false;
 
                 if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.WebGL)
                     EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.WebGL, BuildTarget.WebGL);
@@ -68,7 +81,7 @@ namespace Ekqo.Game.Editor
                     locationPathName = output,
                     target = BuildTarget.WebGL,
                     targetGroup = BuildTargetGroup.WebGL,
-                    options = BuildOptions.None,
+                    options = BuildOptions.CleanBuildCache,
                 });
 
                 if (report.summary.result == BuildResult.Succeeded)
@@ -89,7 +102,7 @@ namespace Ekqo.Game.Editor
                 else
                 {
                     EditorUtility.DisplayDialog(Title,
-                        $"The build failed ({report.summary.totalErrors} errors). Copy the red lines from the Console and send them to Claude.",
+                        $"The build failed ({report.summary.totalErrors} errors).\n\nQuit Unity, delete the folder game/Library/Bee, open the project again and build once more. If it still fails, copy the red lines from the Console and send them to Claude.",
                         "OK");
                 }
             }
@@ -99,6 +112,9 @@ namespace Ekqo.Game.Editor
                 PlayerSettings.WebGL.decompressionFallback = oldFallback;
                 PlayerSettings.WebGL.template = oldTemplate;
                 PlayerSettings.WebGL.nameFilesAsHashes = oldHashes;
+                PlayerSettings.SetIl2CppCodeGeneration(web, oldCodeGen);
+                PlayerSettings.SetIl2CppCompilerConfiguration(web, oldCompiler);
+                EditorUserBuildSettings.development = oldDevelopment;
             }
         }
 
