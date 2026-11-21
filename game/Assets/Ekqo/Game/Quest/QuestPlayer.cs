@@ -60,7 +60,7 @@ namespace Ekqo.Game
         private bool _nextPressed;
         private Func<IEnumerator> _hearAgain;
 
-        private const float EkqoHidden = 190, EkqoOut = 330;
+        private const float EkqoHidden = 240, EkqoOut = 370;
 
         // ---------- start ----------
 
@@ -276,7 +276,7 @@ namespace Ekqo.Game
                 ClearUI();
                 var word = _text.Word(c);
                 _ui.Add(WordCard(c, word, _text.Gloss(c)));
-                SetInstruction("Listen to Ekqo", null, top: true);
+                SetInstruction("Listen to Ekqo", null);
                 yield return Speak("ekqo", $"word/{c}", word);
                 _hearAgain = () => Speak("ekqo", $"word/{c}", word);
                 yield return WaitNext();
@@ -298,7 +298,7 @@ namespace Ekqo.Game
                 ClearUI();
                 var word = _text.Word(c);
                 _ui.Add(WordCard(c, word, _text.Gloss(c)));
-                SetInstruction("Say it with Ekqo!", "Saying it out loud is the goal. Tap the arrow when you're ready.", top: true);
+                SetInstruction("Say it with Ekqo!", "Saying it out loud is the goal. Tap the arrow when you're ready.");
                 yield return Speak("ekqo", $"word/{c}", word);
                 _hearAgain = () => Speak("ekqo", $"word/{c}", word);
                 yield return WaitNext();
@@ -311,7 +311,7 @@ namespace Ekqo.Game
                 var sentence = _text.Pattern(p);
                 var meaning = _text.PatternMeaning(p).Replace("___", _text.PlayerName);
                 _ui.Add(WordCard(PatternPicture(p), sentence, meaning));
-                SetInstruction("Say it with Ekqo!", "Use your own name.", top: true);
+                SetInstruction("Say it with Ekqo!", "Use your own name.");
                 yield return Speak("ekqo", null, sentence);
                 _hearAgain = () => Speak("ekqo", null, sentence);
                 yield return WaitNext();
@@ -331,9 +331,7 @@ namespace Ekqo.Game
             var word = _text.Word(target);
             ShowBubble("ekqo", word, $"Tap the picture: {_text.Gloss(target)}");
             SetInstruction(instruction, null);
-            var row = new VisualElement();
-            row.AddToClassList("choices");
-            _ui.Add(row);
+            var sides = ChoiceColumns();
             var cards = new Dictionary<string, VisualElement>();
             string picked = null;
             foreach (var c in choices.Distinct())
@@ -345,7 +343,7 @@ namespace Ekqo.Game
                 card.Add(pic);
                 var concept = c;
                 card.RegisterCallback<ClickEvent>(_ => picked = concept);
-                row.Add(card);
+                sides[cards.Count % 2].Add(card);
                 cards[c] = card;
             }
             yield return Speak("ekqo", $"word/{target}", word);
@@ -395,9 +393,7 @@ namespace Ekqo.Game
             SetInstruction("Your turn! Say it out loud, then tap it.", LineText.CleanMeaning(step.Meaning));
 
             var options = Shuffle(_text.Options(_quest.Id, step));
-            var row = new VisualElement();
-            row.AddToClassList("choices");
-            _ui.Add(row);
+            var sides = ChoiceColumns();
             var cards = new Dictionary<TapOption, VisualElement>();
             TapOption picked = null, answer = null;
             foreach (var o in options)
@@ -416,7 +412,7 @@ namespace Ekqo.Game
                 card.Add(text);
                 var option = o;
                 card.RegisterCallback<ClickEvent>(_ => picked = option);
-                row.Add(card);
+                sides[cards.Count % 2].Add(card);
                 cards[o] = card;
             }
 
@@ -582,7 +578,7 @@ namespace Ekqo.Game
             _bush.style.width = 420; _bush.style.height = 200;
             _bush.style.left = Length.Percent(50);
             _bush.style.marginLeft = -210;
-            _bush.style.bottom = 120;
+            _bush.style.bottom = 170;
             _root.Add(_bush);
 
             _fall = new FallingLight();
@@ -684,14 +680,28 @@ namespace Ekqo.Game
                 : new StyleEnum<DisplayStyle>(StyleKeyword.Null);
         }
 
+        /// <summary>Two columns for tap choices, left and right of Ekqo, so he stays in view.</summary>
+        private VisualElement[] ChoiceColumns()
+        {
+            var row = new VisualElement { pickingMode = PickingMode.Ignore };
+            row.AddToClassList("choices");
+            var left = new VisualElement { pickingMode = PickingMode.Ignore };
+            var right = new VisualElement { pickingMode = PickingMode.Ignore };
+            left.AddToClassList("choices__side");
+            right.AddToClassList("choices__side");
+            row.Add(left);
+            row.Add(right);
+            _ui.Add(row);
+            return new[] { left, right };
+        }
+
         private void ShowHear(bool on) => _hearButton.EnableInClassList("hidden", !on);
 
         /// <summary>What to do now, for the child, plus an English hint for the grown-up.</summary>
-        private void SetInstruction(string forChild, string hint, bool top = false)
+        private void SetInstruction(string forChild, string hint)
         {
             var box = new VisualElement { pickingMode = PickingMode.Ignore };
             box.AddToClassList("instruction");
-            if (top) box.AddToClassList("instruction--top");
             box.Add(Text(forChild, "instruction__main"));
             if (!string.IsNullOrEmpty(hint)) box.Add(Text(hint, "instruction__hint", "hint"));
             _ui.Add(box);

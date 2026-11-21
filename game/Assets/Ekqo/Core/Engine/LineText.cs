@@ -143,7 +143,9 @@ namespace Ekqo.Core.Engine
             var line = EditionLine(questId, step.Id);
             var expected = new HashSet<string>(ex.AnyOf.Concat(ex.Concepts));
 
-            if (ex.AnyOf.Count > 0)
+            if (line?.Tap?.Count > 0)
+                foreach (var t in line.Tap) Add(options, t, ConceptOf(t), true);
+            else if (ex.AnyOf.Count > 0)
                 foreach (var c in ex.AnyOf) Add(options, Word(c), c, true);
             else if (ex.Pattern != null)
             {
@@ -167,6 +169,10 @@ namespace Ekqo.Core.Engine
             }
             return options;
         }
+
+        /// <summary>The concept whose edition word is exactly this text, if any.</summary>
+        public string ConceptOf(string text) =>
+            _lexicon.Values.FirstOrDefault(e => e.Text == text)?.Concept;
 
         /// <summary>A say-word of this quest that is not expected here, of the same kind when possible.</summary>
         public string Distractor(string questId, Step step, ICollection<string> expected)

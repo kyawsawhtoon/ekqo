@@ -174,7 +174,8 @@ for (const ed of existsSync(editionsDir) ? readdirSync(editionsDir) : []) {
       const l = eq.lines[s.id];
       const ok = l && (s.type === "line" ? !!l.text : !!(l.accept?.length || l.accept_from_pattern));
       if (ok) linesDone++;
-      [l?.text, l?.prompt, ...(l?.accept ?? []), ...(l?.variants ?? []).map((v) => v.text)].forEach((t) => t && scriptCheck(`${file}#${s.id}`, t));
+      [l?.text, l?.prompt, ...(l?.accept ?? []), ...(l?.tap ?? []), ...(l?.variants ?? []).map((v) => v.text)].forEach((t) => t && scriptCheck(`${file}#${s.id}`, t));
+      for (const t of l?.tap ?? []) if (!l?.accept?.includes(t)) err(`${file}#${s.id}`, `tap answer ${t} is not in accept`);
     }
   }
   // patterns used by core but not templated in this edition

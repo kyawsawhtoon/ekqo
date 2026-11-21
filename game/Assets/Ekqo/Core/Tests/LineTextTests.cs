@@ -103,6 +103,17 @@ namespace Ekqo.Core.Tests
         }
 
         [Test]
+        public void EditionTapAnswersReplaceTheLexiconWords()
+        {
+            var bundle = Q1Bundle();
+            bundle.Edition.Quests[0].Lines["say_scared"].Tap = new List<string> { "ကြောက်တယ်", "မကြောက်ဘူး" };
+            var t = new LineText(bundle);
+            var step = new Step { Id = "say_scared", Type = "say", Expects = new Expects { AnyOf = new List<string> { "ans.yes", "ans.no" } } };
+            CollectionAssert.AreEqual(new[] { "ကြောက်တယ်", "မကြောက်ဘူး" }, t.Options("q01", step).Select(o => o.Text).ToArray());
+            Assert.IsTrue(t.Options("q01", step).All(o => o.Correct));
+        }
+
+        [Test]
         public void OneRightAnswerGetsADistractorOfTheSameKind()
         {
             var t = new LineText(Q1Bundle());

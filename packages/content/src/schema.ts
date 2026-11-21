@@ -274,6 +274,10 @@ export const Line = z.object({
   support: z.string().optional(),                // support-language hint; falls back to core meaning
   roman: z.string().optional(),
   accept: z.array(z.string()).optional(),        // known-good answers for the local matcher
+  /** The answers shown as tap choices, in this order, when the natural answer differs from the
+   *  lexicon words in expects (ကြောက်လား is answered ကြောက်တယ် / မကြောက်ဘူး, not ဟုတ်ကဲ့ / မဟုတ်ဘူး).
+   *  Each one must also be in accept. */
+  tap: z.array(z.string()).optional(),
   accept_from_pattern: z.boolean().optional(),
   /** Reviewed alternatives for the text or prompt, played at random (the line bank). */
   variants: z.array(z.object({

@@ -176,6 +176,7 @@ namespace Ekqo.Core.Content
         public string Support;
         public string Roman;
         public List<string> Accept = new List<string>();
+        public List<string> Tap = new List<string>();   // tap choices, when they differ from the lexicon words
         public bool AcceptFromPattern;
         public List<LineVariant> Variants = new List<LineVariant>();
         public int? LiveUntilVariants;
