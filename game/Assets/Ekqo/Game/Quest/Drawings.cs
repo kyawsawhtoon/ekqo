@@ -129,7 +129,7 @@ namespace Ekqo.Game
             for (var i = 0; i < bands; i++)
             {
                 var t = i / (float)(bands - 1);
-                Draw.Rect(p, new Rect(0, r.height * 0.72f * i / bands, r.width, r.height * 0.72f / bands + 1), Color.Lerp(Sky, SkyLow, t));
+                Draw.Rect(p, new Rect(0, r.height * 0.64f * i / bands, r.width, r.height * 0.64f / bands + 1), Color.Lerp(Sky, SkyLow, t));
             }
             foreach (var s in _stars)
             {
@@ -139,16 +139,16 @@ namespace Ekqo.Game
             Draw.Moon(p, new Vector2(r.width * 0.86f, r.height * 0.14f), r.height * 0.06f, new Color(1f, 0.95f, 0.75f), Color.Lerp(Sky, SkyLow, 0.2f));
 
             // Grandma's house wall and a lit window on the left.
-            Draw.Rect(p, new Rect(0, r.height * 0.30f, r.width * 0.16f, r.height * 0.45f), new Color(0.16f, 0.13f, 0.24f));
-            Draw.RoundRect(p, new Rect(r.width * 0.04f, r.height * 0.40f, r.width * 0.08f, r.height * 0.11f), 6, new Color(1f, 0.82f, 0.45f, 0.9f));
+            Draw.Rect(p, new Rect(0, r.height * 0.24f, r.width * 0.16f, r.height * 0.40f), new Color(0.16f, 0.13f, 0.24f));
+            Draw.RoundRect(p, new Rect(r.width * 0.04f, r.height * 0.32f, r.width * 0.08f, r.height * 0.11f), 6, new Color(1f, 0.82f, 0.45f, 0.9f));
             // Grass.
-            Draw.Rect(p, new Rect(0, r.height * 0.70f, r.width, r.height * 0.30f), new Color(0.09f, 0.20f, 0.17f));
-            Draw.Rect(p, new Rect(0, r.height * 0.70f, r.width, r.height * 0.02f), new Color(0.13f, 0.28f, 0.22f));
+            Draw.Rect(p, new Rect(0, r.height * 0.62f, r.width, r.height * 0.38f), new Color(0.09f, 0.20f, 0.17f));
+            Draw.Rect(p, new Rect(0, r.height * 0.62f, r.width, r.height * 0.02f), new Color(0.13f, 0.28f, 0.22f));
             // A few flowers.
             for (var i = 0; i < 7; i++)
             {
                 var x = r.width * (0.2f + 0.11f * i);
-                var y = r.height * (0.78f + 0.05f * Mathf.Sin(i * 2.3f));
+                var y = r.height * (0.68f + 0.04f * Mathf.Sin(i * 2.3f));
                 Draw.Circle(p, new Vector2(x, y), 5, new Color(0.95f, 0.6f + 0.05f * i, 0.75f, 0.8f));
             }
         }

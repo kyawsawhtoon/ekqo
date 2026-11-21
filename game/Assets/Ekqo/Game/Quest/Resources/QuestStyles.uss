@@ -7,8 +7,8 @@ Label { -unity-text-generator: advanced; white-space: normal; color: rgb(40, 30,
 .run--latin { margin: 0 6px; }
 .run--script { padding-top: 6px; padding-bottom: 6px; }
 
-/* Speech bubble at the top */
-.bubble          { position: absolute; left: 10%; right: 10%; top: 8%; padding: 18px 28px; border-radius: 28px;
+/* Speech bubble at the bottom, under Ekqo, so it never covers him */
+.bubble          { position: absolute; left: 13%; right: 13%; bottom: 3%; padding: 18px 28px; border-radius: 28px;
                    background-color: rgba(255, 250, 235, 0.97); align-items: center; }
 .bubble__speaker { font-size: 20px; -unity-font-style: bold; color: rgb(150, 110, 40); align-self: flex-start; }
 .bubble__text    { font-size: 46px; -unity-text-align: middle-center; }
@@ -33,13 +33,14 @@ Label { -unity-text-generator: advanced; white-space: normal; color: rgb(40, 30,
 .stamp        { position: absolute; left: 1%; bottom: 0.5%; font-size: 12px; color: rgba(255, 247, 214, 0.45); }
 
 /* Instruction to the child, above the choices */
-.instruction  { position: absolute; left: 10%; right: 10%; bottom: 36%; font-size: 24px; color: rgb(255, 247, 214);
+.instruction  { position: absolute; left: 14%; right: 14%; top: 4%; font-size: 24px; color: rgb(255, 247, 214);
                 -unity-text-align: middle-center; }
 
-/* Choices: picture cards and phrase cards along the bottom */
-.choices      { position: absolute; left: 12%; right: 12%; bottom: 5%; height: 30%; flex-direction: row;
-                justify-content: center; align-items: flex-end; }
-.card         { width: 200px; margin: 0 14px; padding: 12px; border-radius: 26px; background-color: rgb(255, 250, 235);
+/* Choices: picture and phrase cards in two columns, left and right of Ekqo */
+.choices      { position: absolute; left: 2%; right: 2%; top: 18%; bottom: 25%; flex-direction: row;
+                justify-content: space-between; align-items: center; }
+.choices__side { width: 30%; align-items: center; justify-content: center; }
+.card         { width: 200px; margin: 8px 0; padding: 12px; border-radius: 26px; background-color: rgb(255, 250, 235);
                 align-items: center; border-width: 6px; border-color: rgba(0, 0, 0, 0); }
 .card:active  { scale: 0.95 0.95; }
 .card--right  { border-color: rgb(120, 200, 130); }
@@ -51,7 +52,7 @@ Label { -unity-text-generator: advanced; white-space: normal; color: rgb(40, 30,
 .card--phrase { width: auto; min-width: 220px; padding: 22px 30px; }
 
 /* Big word card while teaching (hear and echo) */
-.word         { position: absolute; left: 30%; right: 30%; bottom: 6%; padding: 16px; border-radius: 30px;
+.word         { position: absolute; right: 3%; top: 18%; width: 28%; padding: 16px; border-radius: 30px;
                 background-color: rgb(255, 250, 235); align-items: center; }
 .word__picture { width: 170px; height: 150px; }
 .word__text   { font-size: 54px; -unity-text-align: middle-center; }
@@ -76,6 +77,5 @@ Label { -unity-text-generator: advanced; white-space: normal; color: rgb(40, 30,
 .no-hints .hint { display: none; }
 
 .subtitle           { font-size: 24px; color: rgb(255, 247, 214); -unity-text-align: middle-center; margin: 8px 0; }
-.instruction--top   { top: 5%; bottom: auto; }
 .instruction__main  { font-size: 28px; color: rgb(255, 247, 214); -unity-text-align: middle-center; }
 .instruction__hint  { font-size: 18px; color: rgba(255, 247, 214, 0.75); -unity-text-align: middle-center; }

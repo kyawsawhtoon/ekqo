@@ -143,7 +143,8 @@ lines:
   say_scared:
     prompt:  "ကြောက်လား"
     support: "Are you scared?"
-    accept:  [ဟုတ်ကဲ့, မဟုတ်ဘူး, ကြောက်တယ်, မကြောက်ဘူး]
+    accept:  [ကြောက်တယ်, မကြောက်ဘူး, ဟုတ်ကဲ့, မဟုတ်ဘူး]
+    tap:     [ကြောက်တယ်, မကြောက်ဘူး]
     status:  draft
 ```
 
@@ -154,6 +155,7 @@ lines:
   - `text` for `line` steps (what the character says),
   - `prompt` for `say` and `use` steps (what the character asks),
   - `accept` (known-good answers) or `accept_from_pattern: true`,
+  - `tap`: the answers shown as tap choices, in order, when the natural answer is not the lexicon word in `expects` (ကြောက်လား is answered ကြောက်တယ် / မကြောက်ဘူး). Each must also be in `accept`. Without it, the game builds the tap choices from `expects` and the lexicon,
   - `support` (the support-language hint; falls back to the core `meaning` for line steps),
   - `roman` (romanization), `status` and `note` for the reviewer,
   - `variants`: the **line bank**, reviewed alternatives played at random. Each has `text`, optional `support` and `roman`, `status`, and `source`: `drafted` (written offline) or `live` (a live AI line from play that a reviewer approved),
