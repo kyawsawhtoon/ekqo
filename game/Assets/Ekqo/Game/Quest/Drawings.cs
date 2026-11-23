@@ -146,31 +146,48 @@ namespace Ekqo.Game
     }
 
     /// <summary>
-    /// Ekqo at Stage 1 (Spark) as a pixel sprite: dim until the child says hello, then glowing.
-    /// Glow runs 0 (dim) to 1 (bright). Place Halo in the world before Ekqo so it sits behind.
+    /// Ekqo at Stage 1 (Spark) as a pixel sprite: a little light spirit with floppy ears, a
+    /// flame of light on his head and big shiny eyes. He looks tired and dim until the child
+    /// says hello, then glows. Glow runs 0 (dim) to 1 (bright). Expressions follow his state:
+    /// happy after a right answer, talking while a line plays, sleepy at bedtime.
+    /// Place Halo in the world before Ekqo so it sits behind him.
     /// </summary>
     internal sealed class EkqoView : PixelSprite
     {
         public float Glow = 0.15f;       // eased toward TargetGlow
         public float TargetGlow = 0.15f;
         public bool Sleepy;
-        public float Talk;               // squash and stretch while a line plays
-        public float Happy;              // hop after a right answer
+        public float Talk;               // mouth moves while a line plays
+        public float Happy;              // hop and smile after a right answer
+        public float Mud = 1;            // mud spots until his bath (Chapter 1)
         public readonly HaloView Halo = new HaloView();
+        private readonly VisualElement _mud;
 
         public EkqoView() : base("ekqo_dim")
         {
+            _mud = new VisualElement { pickingMode = PickingMode.Ignore };
+            _mud.style.position = UnityEngine.UIElements.Position.Absolute;
+            _mud.style.left = 0; _mud.style.top = 0; _mud.style.right = 0; _mud.style.bottom = 0;
+            PixelArt.Show(_mud, "ekqo_mud");
+            Add(_mud);
         }
 
         public void Tick(float time, float dt)
         {
             Glow = Mathf.MoveTowards(Glow, TargetGlow, dt * 0.6f);
             Happy = Mathf.MoveTowards(Happy, 0, dt * 0.8f);
-            SetSprite(Sleepy ? "ekqo_sleepy" : Glow < 0.3f ? "ekqo_dim" : "ekqo");
+            var mouthOpen = Talk > 0 && Mathf.Sin(time * 14) > 0;
+            SetSprite(Sleepy ? "ekqo_sleepy"
+                : Glow < 0.3f ? "ekqo_dim"
+                : Happy > 0.25f ? "ekqo_happy"
+                : mouthOpen ? "ekqo_talk"
+                : "ekqo");
+            _mud.style.display = Mud > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            _mud.style.opacity = Mathf.Clamp01(Mud);
             var bob = Mathf.Sin(time * (Sleepy ? 1.2f : 2.4f)) * (Sleepy ? 1.2f : 2.4f) - Mathf.Abs(Mathf.Sin(time * 10)) * 12 * Happy;
             Nudge = new Vector2(0, Mathf.Round(bob));
             var s = Talk > 0 ? Mathf.Abs(Mathf.Sin(time * 14)) * Talk : 0;
-            style.scale = new Scale(new Vector3(1 + 0.08f * s, 1 - 0.08f * s, 1));
+            style.scale = new Scale(new Vector3(1 + 0.04f * s, 1 - 0.04f * s, 1));
             Halo.Pos = Pos + (Size - Halo.Size) * 0.5f;
             Halo.Nudge = Nudge;
             Halo.Strength = 0.35f + Glow * 1.3f;

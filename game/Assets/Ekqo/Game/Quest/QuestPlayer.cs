@@ -605,7 +605,7 @@ namespace Ekqo.Game
             _root.Add(_world);
             var bushAt = map.Mark("ekqo_bush");
             _ekqoHidden = bushAt + new Vector2(6, 8);     // only his tuft shows over the bush
-            _ekqoOut = bushAt + new Vector2(6, -30);      // floating above the bush
+            _ekqoOut = bushAt + new Vector2(6, -40);      // floating above the bush
             _childStart = map.Mark("door") + new Vector2(0, PixelArt.Tile);
             _childStop = map.Mark("player_stop");
             _childCorner = new Vector2(_childStart.x, _childStop.y);

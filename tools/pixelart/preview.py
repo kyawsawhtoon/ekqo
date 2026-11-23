@@ -101,9 +101,11 @@ def garden(palette, sprites, ekqo_out=True, ekqo="ekqo"):
     cx, cy = marks["player_stop"]
     g.alpha_composite(image(palette, sprites["child_side"], CHARACTER), (cx, cy))
     ew = len(sprites[ekqo][0])
-    ex, ey = bx + 6, by + (-30 if ekqo_out else 8)
+    ex, ey = bx + 6, by + (-40 if ekqo_out else 8)
     g.alpha_composite(halo(100, 0.35 + 1.3 * (0.8 if ekqo_out else 0.12)), (ex + ew // 2 - 50, ey + ew // 2 - 50))
     g.alpha_composite(image(palette, sprites[ekqo]), (ex, ey))
+    if "ekqo_mud" in sprites:   # muddy until his bath
+        g.alpha_composite(image(palette, sprites["ekqo_mud"]), (ex, ey))
     g.alpha_composite(image(palette, sprites["bush_big"], NIGHT), (bx, by))
     return g, marks
 

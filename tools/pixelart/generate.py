@@ -326,52 +326,72 @@ def lantern():
 sprite("lantern", lantern())
 
 
-# ---------------------------------------------------------------- the child
+# ---------------------------------------------------------------- the child (chibi: big head, small body)
+
+def eye(a, x, y, h=4, shine=True):
+    """A big shiny eye, 2 wide."""
+    a.rect(x, y, x + 1, y + h - 1, "k")
+    a.rect(x, y + h - 2, x + 1, y + h - 1, "H")
+    if shine:
+        a.set(x, y, "F")
+
 
 def child(facing, step):
     a = Art(32)
     side = facing == "side"
-    # legs
+    # legs and shoes
     if side:
         if step:
-            a.rect(11, 23, 14, 28, "b"); a.rect(18, 23, 21, 28, "b")
-            a.rect(9, 28, 14, 29, "H"); a.rect(18, 28, 23, 29, "H")
+            a.rect(11, 25, 13, 28, "b"); a.rect(18, 25, 20, 28, "b")
+            a.rect(9, 28, 13, 29, "C"); a.rect(18, 28, 22, 29, "C")
         else:
-            a.rect(14, 23, 18, 28, "b"); a.rect(14, 28, 20, 29, "H")
+            a.rect(14, 25, 17, 28, "b"); a.rect(14, 28, 19, 29, "C")
     else:
         lift = 1 if step else 0
-        a.rect(11, 23, 14, 28 - lift, "b"); a.rect(17, 23, 20, 28 + lift - 1, "b")
-        a.rect(10, 28 - lift, 14, 29 - lift, "H"); a.rect(17, 28, 21, 29, "H")
-    # body
-    a.rect(10, 16, 21, 24, "t")
-    a.rect(10, 22, 21, 24, "T")
+        a.rect(11, 25, 14, 28 - lift, "b"); a.rect(17, 25, 20, 28, "b")
+        a.rect(10, 28 - lift, 14, 29 - lift, "C"); a.rect(17, 28, 21, 29, "C")
+    # body: a small rounded shirt
+    a.ellipse(16, 23, 6.5, 4.5, "t")
+    a.rect(10, 20, 21, 25, "t")
     if side:
-        a.rect(15, 17, 18, 22, "T" if not step else "t")
-        a.rect(15 + (2 if step else 0), 18, 17 + (2 if step else 0), 23, "s")
+        sw = 2 if step else 0
+        a.rect(15 + sw, 21, 17 + sw, 24, "t")
+        a.rect(15 + sw, 25, 17 + sw, 25, "s")
     else:
         sw = 1 if step else 0
-        a.rect(7, 17 + sw, 9, 22 + sw, "t"); a.rect(22, 17 - sw + 1, 24, 22 - sw + 1, "t")
-        a.rect(7, 23 + sw, 9, 24 + sw, "s"); a.rect(22, 23 - sw + 1, 24, 24 - sw + 1, "s")
-        a.rect(13, 16, 18, 16, "v")
-    # head
-    a.ellipse(16, 10, 8.5, 8, "s")
+        a.rect(7, 21 + sw, 9, 24 + sw, "t"); a.rect(22, 22 - sw, 24, 25 - sw, "t")
+        a.rect(7, 25 + sw, 9, 25 + sw, "s"); a.rect(22, 26 - sw, 24, 26 - sw, "s")
+        if facing == "down":
+            a.ellipse(16, 23, 2, 1.5, "y")   # a little star badge on the shirt
+    # head: big and round
+    a.ellipse(16, 11.5, 11, 10, "s")
     if facing == "up":
-        a.ellipse(16, 9.5, 8.5, 8, "h")
-        a.rect(10, 4, 21, 5, "u")
+        a.ellipse(16, 11, 11, 10, "h")
+        a.rect(15, 0, 16, 1, "h")
+        a.set(17, 0, "h")
+        a.shade("h", "H", "u", 2)
     elif side:
-        a.ellipse(14.5, 8, 8.5, 6.5, "h")
-        a.rect(7, 8, 11, 14, "h")
-        a.set(20, 11, "k"); a.set(20, 12, "k"); a.set(21, 11, "F")
-        a.set(19, 14, "m"); a.set(22, 15, "S"); a.set(21, 15, "S")
-        a.rect(9, 4, 16, 4, "u")
+        a.ellipse(14.5, 8, 11, 6.5, "h")
+        a.rect(5, 8, 11, 17, "h")
+        a.rect(19, 10, 25, 10, "h")
+        a.rect(13, 1, 14, 2, "h")
+        a.shade("h", "H", "u", 1)
+        a.set(27, 14, "s"); a.set(27, 15, "s")       # little nose
+        eye(a, 22, 13, 4)
+        a.rect(20, 18, 21, 18, "m")
+        a.set(24, 19, "S")
+        a.rect(12, 13, 13, 15, "S")                  # ear
     else:
-        a.ellipse(16, 7.5, 9, 5.5, "h")
-        a.rect(7, 7, 9, 14, "h"); a.rect(23, 7, 25, 14, "h")
-        a.rect(10, 4, 19, 4, "u")
-        for ex in (12, 19):
-            a.rect(ex, 11, ex + 1, 13, "k"); a.set(ex, 11, "F")
-        a.set(10, 14, "m"); a.set(22, 14, "m")
-        a.rect(15, 15, 16, 15, "S")
+        a.ellipse(16, 8.5, 11.5, 7, "h")
+        a.rect(5, 8, 7, 17, "h"); a.rect(24, 8, 26, 17, "h")
+        # bangs
+        for x in range(8, 24, 4):
+            a.rect(x, 13, x + 1, 13, "h")
+        a.rect(15, 0, 16, 1, "h"); a.set(17, 0, "h")
+        a.shade("h", "H", "u", 1)
+        eye(a, 11, 14, 4); eye(a, 19, 14, 4)
+        a.rect(8, 18, 9, 18, "m"); a.rect(22, 18, 23, 18, "m")
+        a.rect(15, 19, 16, 19, "S")
     a.shade("t", "T", "v", 1)
     a.outline("k")
     return a
@@ -383,40 +403,104 @@ for f in ("down", "up", "side"):
 
 
 # ---------------------------------------------------------------- Ekqo
+# A little light spirit from the Cloud Meadow: a soft, round mochi body, two floppy cloud
+# ears with pink insides, a spark on his head, a star on his tummy, stubby feet that hop,
+# and big shiny eyes. Expressions: normal, happy, talk, sleepy, tired (dim, before hello).
 
-def ekqo(mood="happy", dim=False, size=44):
-    k = size / 36   # designed on a 36px grid
-    S = lambda v: round(v * k)
-    a = Art(size)
+def ekqo_body(dim=False):
+    a = Art(44)
     body, shade = ("U", "V") if dim else ("e", "E")
-    cx = size / 2
-    a.ellipse(cx, 22 * k, 13 * k, 11 * k, body)
-    a.poly([(round(cx - 9 * k), S(16)), (round(cx), S(4)), (round(cx + 9 * k), S(16))], body)
-    a.shade(body, shade, None, 2)
-    # flame tuft
-    a.poly([(round(cx - 3 * k), S(7)), (round(cx), S(1)), (round(cx + 3 * k), S(7))], "Y" if dim else "y")
-    a.set(round(cx), S(3), "Y")
-    ey = S(20)
-    for ex in (round(cx - 6 * k), round(cx + 3 * k)):
-        if mood == "sleepy":
-            a.rect(ex, ey + 1, ex + 2, ey + 1, "k")
-        else:
-            a.rect(ex, ey - 1, ex + 2, ey + 3, "k")
-            a.set(ex, ey - 1, "F"); a.set(ex + 1, ey - 1, "F")
-    a.rect(round(cx - 11 * k), S(24), round(cx - 8 * k), S(25), "m")
-    a.rect(round(cx + 8 * k), S(24), round(cx + 11 * k), S(25), "m")
-    if mood == "sleepy":
-        a.rect(round(cx - 1), S(27), round(cx + 1), S(27), "K")
-    else:
-        a.rect(round(cx - 3), S(26), round(cx + 2), S(26), "k")
-        a.rect(round(cx - 2), S(27), round(cx + 1), S(27), "C")
+    # floppy ears, leaning out
+    a.poly([(8, 22), (3, 12), (5, 7), (10, 9), (15, 18)], body)
+    a.poly([(36, 22), (41, 12), (39, 7), (34, 9), (29, 18)], body)
+    # body: round on top, a little wider at the bottom
+    a.ellipse(22, 25, 15, 13, body)
+    a.ellipse(22, 30, 16.5, 9.5, body)
+    # feet
+    a.ellipse(14.5, 39.5, 4, 2.5, body)
+    a.ellipse(29.5, 39.5, 4, 2.5, body)
+    a.shade(body, shade, "F" if not dim else None, 2)
+    # inner ears
+    a.poly([(6, 11), (8, 10), (11, 16), (8, 17)], "f" if not dim else "M")
+    a.poly([(38, 11), (36, 10), (33, 16), (36, 17)], "f" if not dim else "M")
+    # spark on his head (a small four-point star)
+    spark = "Y" if dim else "y"
+    # a little flame of light on his head, its tip leaning to one side
+    a.ellipse(22, 9.5, 3.5, 3.5, spark)
+    a.poly([(18, 9), (24, 1), (26, 9)], spark)
+    a.set(24, 1, spark)
+    a.rect(21, 12, 23, 13, spark)
+    if not dim:
+        a.rect(21, 8, 22, 10, "F")
+    # star on his tummy
+    t = "E" if not dim else "V"
+    a.rect(21, 31, 22, 31, t); a.rect(20, 32, 23, 33, t); a.rect(21, 34, 22, 34, t)
     a.outline("k")
     return a
 
 
-sprite("ekqo_dim", ekqo(dim=True))
+def ekqo_face(a, mood, dim=False):
+    lx, rx, ey = 13, 26, 21
+    if mood in ("sleepy", "happy"):
+        for x in (lx, rx):
+            if mood == "sleepy":       # closed, curved down
+                a.rect(x, ey + 3, x + 4, ey + 3, "k"); a.set(x - 1, ey + 2, "k"); a.set(x + 5, ey + 2, "k")
+            else:                      # ^ ^ smiling eyes
+                a.rect(x + 1, ey + 1, x + 3, ey + 1, "k"); a.set(x, ey + 2, "k"); a.set(x + 4, ey + 2, "k")
+                a.set(x - 1, ey + 3, "k"); a.set(x + 5, ey + 3, "k")
+    else:
+        for x in (lx, rx):
+            # big oval eye: dark, with a blue shine at the bottom and two white sparkles
+            a.rect(x + 1, ey, x + 3, ey, "k")
+            a.rect(x, ey + 1, x + 4, ey + 6, "k")
+            a.rect(x + 1, ey + 7, x + 3, ey + 7, "k")
+            a.rect(x + 1, ey + 5, x + 3, ey + 6, "B")
+            a.rect(x + 1, ey + 1, x + 2, ey + 2, "F")
+            a.set(x + 3, ey + 5, "c")
+            if dim:                    # tired: heavy lids
+                a.rect(x, ey, x + 4, ey + 2, "V")
+                a.rect(x, ey + 3, x + 4, ey + 3, "k")
+    # cheeks
+    a.rect(8, ey + 7, 11, ey + 8, "m" if not dim else "M")
+    a.rect(32, ey + 7, 35, ey + 8, "m" if not dim else "M")
+    # mouth
+    my = ey + 8
+    if mood == "talk":
+        a.rect(20, my, 23, my + 3, "k")
+        a.rect(21, my + 1, 22, my + 2, "C")
+        a.rect(21, my + 2, 22, my + 2, "f")
+    elif mood == "happy":
+        a.rect(19, my, 24, my, "k")
+        a.rect(20, my + 1, 23, my + 1, "C")
+        a.rect(21, my + 2, 22, my + 2, "k")
+        a.set(19, my + 1, "k"); a.set(24, my + 1, "k")
+    elif mood == "sleepy" or dim:
+        a.rect(21, my + 1, 22, my + 1, "k")
+    else:                              # small cat-like smile
+        a.set(19, my, "k"); a.set(20, my + 1, "k"); a.set(21, my, "k")
+        a.set(22, my, "k"); a.set(23, my + 1, "k"); a.set(24, my, "k")
+    return a
+
+
+def ekqo(mood="normal", dim=False):
+    return ekqo_face(ekqo_body(dim), mood, dim)
+
+
+def ekqo_mud():
+    """Mud spots, drawn over Ekqo until his bath (Chapter 1). Same size as Ekqo."""
+    a = Art(44)
+    for x, y in ((8, 31), (9, 32), (8, 32), (33, 35), (34, 35), (33, 36), (26, 39), (27, 39), (5, 15), (12, 36)):
+        a.set(x, y, "O")
+    a.set(9, 31, "o"); a.set(34, 34, "o")
+    return a
+
+
+sprite("ekqo_dim", ekqo("normal", dim=True))
 sprite("ekqo", ekqo())
+sprite("ekqo_happy", ekqo("happy"))
+sprite("ekqo_talk", ekqo("talk"))
 sprite("ekqo_sleepy", ekqo("sleepy"))
+sprite("ekqo_mud", ekqo_mud())
 
 
 # ---------------------------------------------------------------- word pictures and icons
