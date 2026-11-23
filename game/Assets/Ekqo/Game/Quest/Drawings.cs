@@ -5,9 +5,9 @@ using UnityEngine.UIElements;
 namespace Ekqo.Game
 {
     /// <summary>
-    /// Placeholder art drawn in code with UI Toolkit's Painter2D, so Quest 1 is playable before
-    /// the real art exists. Each piece is one element; swap it for sprites later without
-    /// touching the quest flow.
+    /// Drawing helpers and the pieces still drawn in code with UI Toolkit's Painter2D (the
+    /// falling light, button icons, and fallback pictures). The world, Ekqo, the bush and the
+    /// word pictures are pixel art from PixelArt.txt (see PixelArt.cs).
     /// </summary>
     internal static class Draw
     {
@@ -100,175 +100,83 @@ namespace Ekqo.Game
         }
     }
 
-    /// <summary>The night garden: sky, twinkling stars, moon, grass and the bush Ekqo hides in.</summary>
-    internal sealed class GardenView : VisualElement
+    /// <summary>Night colours shared by the screens.</summary>
+    internal static class Night
     {
         public static readonly Color Sky = new Color(0.106f, 0.114f, 0.227f);
-        private static readonly Color SkyLow = new Color(0.20f, 0.18f, 0.38f);
-        private readonly List<Vector3> _stars = new List<Vector3>();
-        private float _time;
+        /// <summary>Characters are tinted less than the map, so they stand out at night.</summary>
+        public static readonly Color Character = Color.Lerp(Color.white, PixelArt.NightTint, 0.45f);
+    }
 
-        public GardenView()
+    /// <summary>The big bush Ekqo hides in: the bush sprite two tiles wide. Rustles when Shake &gt; 0.</summary>
+    internal sealed class BushView : PixelSprite
+    {
+        public float Shake;
+
+        public BushView(Vector2 pos) : base("bush")
         {
-            pickingMode = PickingMode.Ignore;
-            style.position = Position.Absolute;
-            style.left = 0; style.top = 0; style.right = 0; style.bottom = 0;
-            var rng = new System.Random(7);
-            for (var i = 0; i < 60; i++) _stars.Add(new Vector3((float)rng.NextDouble(), (float)rng.NextDouble() * 0.6f, (float)rng.NextDouble() * 6.28f));
-            generateVisualContent += Paint;
+            Pos = pos;
+            Size = new Vector2(32, 32);
+            style.unityBackgroundImageTintColor = PixelArt.NightTint;
         }
 
-        public void Tick(float time) { _time = time; MarkDirtyRepaint(); }
-
-        private void Paint(MeshGenerationContext ctx)
+        public void Tick(float time)
         {
-            var p = ctx.painter2D;
-            var r = contentRect;
-            if (r.width <= 0) return;
-            const int bands = 24;
-            for (var i = 0; i < bands; i++)
-            {
-                var t = i / (float)(bands - 1);
-                Draw.Rect(p, new Rect(0, r.height * 0.64f * i / bands, r.width, r.height * 0.64f / bands + 1), Color.Lerp(Sky, SkyLow, t));
-            }
-            foreach (var s in _stars)
-            {
-                var a = 0.5f + 0.5f * Mathf.Sin(_time * 1.5f + s.z);
-                Draw.Star(p, new Vector2(s.x * r.width, s.y * r.height), 3 + 3 * a, new Color(1f, 0.97f, 0.8f, 0.35f + 0.6f * a), s.z * 20);
-            }
-            Draw.Moon(p, new Vector2(r.width * 0.86f, r.height * 0.14f), r.height * 0.06f, new Color(1f, 0.95f, 0.75f), Color.Lerp(Sky, SkyLow, 0.2f));
-
-            // Grandma's house wall and a lit window on the left.
-            Draw.Rect(p, new Rect(0, r.height * 0.24f, r.width * 0.16f, r.height * 0.40f), new Color(0.16f, 0.13f, 0.24f));
-            Draw.RoundRect(p, new Rect(r.width * 0.04f, r.height * 0.32f, r.width * 0.08f, r.height * 0.11f), 6, new Color(1f, 0.82f, 0.45f, 0.9f));
-            // Grass.
-            Draw.Rect(p, new Rect(0, r.height * 0.62f, r.width, r.height * 0.38f), new Color(0.09f, 0.20f, 0.17f));
-            Draw.Rect(p, new Rect(0, r.height * 0.62f, r.width, r.height * 0.02f), new Color(0.13f, 0.28f, 0.22f));
-            // A few flowers.
-            for (var i = 0; i < 7; i++)
-            {
-                var x = r.width * (0.2f + 0.11f * i);
-                var y = r.height * (0.68f + 0.04f * Mathf.Sin(i * 2.3f));
-                Draw.Circle(p, new Vector2(x, y), 5, new Color(0.95f, 0.6f + 0.05f * i, 0.75f, 0.8f));
-            }
+            Shake = Mathf.MoveTowards(Shake, 0, 0.02f);
+            Nudge = new Vector2(Mathf.Sin(time * 30) * 1.5f * Shake, 0);
         }
     }
 
-    /// <summary>The bush in front of Ekqo. Rustles when shake &gt; 0.</summary>
-    internal sealed class BushView : VisualElement
+    /// <summary>The soft light around Ekqo, drawn behind him.</summary>
+    internal sealed class HaloView : PixelSprite
     {
-        private float _time;
-        public float Shake;
+        public float Strength;
 
-        public BushView()
+        public HaloView()
         {
-            pickingMode = PickingMode.Ignore;
+            Size = new Vector2(56, 56);
             generateVisualContent += Paint;
         }
 
-        public void Tick(float time) { _time = time; Shake = Mathf.MoveTowards(Shake, 0, 0.02f); MarkDirtyRepaint(); }
-
         private void Paint(MeshGenerationContext ctx)
         {
-            var p = ctx.painter2D;
             var r = contentRect;
-            var w = r.width; var h = r.height;
-            var dx = Mathf.Sin(_time * 30) * 6 * Shake;
-            var dark = new Color(0.10f, 0.30f, 0.20f);
-            var mid = new Color(0.14f, 0.40f, 0.26f);
-            var light = new Color(0.20f, 0.50f, 0.32f);
-            Draw.Circle(p, new Vector2(w * 0.20f + dx, h * 0.62f), h * 0.36f, dark);
-            Draw.Circle(p, new Vector2(w * 0.80f - dx, h * 0.62f), h * 0.36f, dark);
-            Draw.Circle(p, new Vector2(w * 0.35f - dx, h * 0.45f), h * 0.40f, mid);
-            Draw.Circle(p, new Vector2(w * 0.65f + dx, h * 0.48f), h * 0.38f, mid);
-            Draw.Circle(p, new Vector2(w * 0.50f + dx, h * 0.62f), h * 0.36f, light);
-            Draw.Rect(p, new Rect(w * 0.08f, h * 0.62f, w * 0.84f, h * 0.38f), mid);
-            for (var i = 0; i < 4; i++)
-                Draw.Circle(p, new Vector2(w * (0.22f + 0.18f * i) + dx, h * (0.45f + 0.1f * (i % 2))), 4, new Color(1f, 0.85f, 0.9f, 0.8f));
+            if (r.width <= 0 || Strength <= 0.01f) return;
+            Draw.Glow(ctx.painter2D, r.center, r.width * 0.22f, new Color(1f, 0.92f, 0.55f), Strength);
         }
     }
 
     /// <summary>
-    /// Ekqo at Stage 1 (Spark): a tiny, muddy light spirit. Glow runs 0 (dim) to 1 (bright).
+    /// Ekqo at Stage 1 (Spark) as a pixel sprite: dim until the child says hello, then glowing.
+    /// Glow runs 0 (dim) to 1 (bright). Place Halo in the world before Ekqo so it sits behind.
     /// </summary>
-    internal sealed class EkqoView : VisualElement
+    internal sealed class EkqoView : PixelSprite
     {
         public float Glow = 0.15f;       // eased toward TargetGlow
         public float TargetGlow = 0.15f;
         public bool Sleepy;
-        public bool EyesOpen = true;
-        public float Talk;               // mouth movement while a line plays
-        public float Happy;              // bounce after a right answer
-        public float Mud = 1;            // mud spots until the bath in Q3
-        private float _time;
-        private float _blinkAt = 2;
+        public float Talk;               // squash and stretch while a line plays
+        public float Happy;              // hop after a right answer
+        public readonly HaloView Halo = new HaloView();
 
-        public EkqoView()
+        public EkqoView() : base("ekqo_dim")
         {
-            pickingMode = PickingMode.Ignore;
-            generateVisualContent += Paint;
+            Size = new Vector2(24, 24);
         }
 
         public void Tick(float time, float dt)
         {
-            _time = time;
             Glow = Mathf.MoveTowards(Glow, TargetGlow, dt * 0.6f);
             Happy = Mathf.MoveTowards(Happy, 0, dt * 0.8f);
-            if (time > _blinkAt + 0.15f) _blinkAt = time + 2 + Random.value * 3;
-            var bob = Mathf.Sin(time * (Sleepy ? 1.2f : 2.4f)) * (Sleepy ? 3 : 6) - Mathf.Abs(Mathf.Sin(time * 10)) * 26 * Happy;
-            style.translate = new Translate(0, bob);
-            MarkDirtyRepaint();
-        }
-
-        private void Paint(MeshGenerationContext ctx)
-        {
-            var p = ctx.painter2D;
-            var r = contentRect;
-            var c = r.center;
-            var rad = Mathf.Min(r.width, r.height) * 0.26f;
-            var core = Color.Lerp(new Color(0.75f, 0.72f, 0.55f), new Color(1f, 0.97f, 0.78f), Glow);
-
-            Draw.Glow(p, c, rad, new Color(1f, 0.92f, 0.55f, 1f), 0.25f + Glow);
-            Draw.Circle(p, c, rad, core);
-            Draw.Circle(p, c + new Vector2(-rad * 0.3f, -rad * 0.35f), rad * 0.35f, new Color(1, 1, 1, 0.35f + 0.3f * Glow));
-            // A little flame tuft on top.
-            p.fillColor = core;
-            p.BeginPath();
-            p.MoveTo(c + new Vector2(-rad * 0.35f, -rad * 0.85f));
-            p.QuadraticCurveTo(c + new Vector2(rad * 0.1f, -rad * 1.9f + Mathf.Sin(_time * 3) * 6), c + new Vector2(rad * 0.4f, -rad * 0.8f));
-            p.ClosePath();
-            p.Fill();
-
-            if (Mud > 0)
-            {
-                var mud = new Color(0.42f, 0.30f, 0.20f, 0.8f * Mud);
-                Draw.Circle(p, c + new Vector2(rad * 0.55f, rad * 0.35f), rad * 0.16f, mud);
-                Draw.Circle(p, c + new Vector2(-rad * 0.6f, rad * 0.45f), rad * 0.12f, mud);
-                Draw.Circle(p, c + new Vector2(rad * 0.15f, rad * 0.7f), rad * 0.10f, mud);
-            }
-
-            var eye = new Color(0.16f, 0.12f, 0.24f);
-            var blink = _time > _blinkAt && _time < _blinkAt + 0.15f;
-            var el = c + new Vector2(-rad * 0.32f, -rad * 0.05f);
-            var er = c + new Vector2(rad * 0.32f, -rad * 0.05f);
-            if (Sleepy || !EyesOpen || blink)
-            {
-                Draw.ArcStroke(p, el, rad * 0.14f, 20, 160, eye, 4);
-                Draw.ArcStroke(p, er, rad * 0.14f, 20, 160, eye, 4);
-            }
-            else
-            {
-                Draw.Circle(p, el, rad * 0.14f, eye);
-                Draw.Circle(p, er, rad * 0.14f, eye);
-                Draw.Circle(p, el + new Vector2(rad * 0.05f, -rad * 0.05f), rad * 0.05f, Color.white);
-                Draw.Circle(p, er + new Vector2(rad * 0.05f, -rad * 0.05f), rad * 0.05f, Color.white);
-            }
-            // Cheeks and mouth.
-            Draw.Circle(p, c + new Vector2(-rad * 0.55f, rad * 0.2f), rad * 0.1f, new Color(1f, 0.6f, 0.6f, 0.5f));
-            Draw.Circle(p, c + new Vector2(rad * 0.55f, rad * 0.2f), rad * 0.1f, new Color(1f, 0.6f, 0.6f, 0.5f));
-            var open = Talk > 0 ? Mathf.Abs(Mathf.Sin(_time * 14)) * Talk : 0;
-            if (open > 0.1f) Draw.Circle(p, c + new Vector2(0, rad * 0.32f), rad * 0.06f + rad * 0.08f * open, eye);
-            else Draw.ArcStroke(p, c + new Vector2(0, rad * 0.22f), rad * 0.14f, 20, 160, eye, 3.5f);
+            SetSprite(Sleepy ? "ekqo_sleepy" : Glow < 0.3f ? "ekqo_dim" : "ekqo");
+            var bob = Mathf.Sin(time * (Sleepy ? 1.2f : 2.4f)) * (Sleepy ? 0.6f : 1.2f) - Mathf.Abs(Mathf.Sin(time * 10)) * 6 * Happy;
+            Nudge = new Vector2(0, Mathf.Round(bob));
+            var s = Talk > 0 ? Mathf.Abs(Mathf.Sin(time * 14)) * Talk : 0;
+            style.scale = new Scale(new Vector3(1 + 0.08f * s, 1 - 0.08f * s, 1));
+            Halo.Pos = Pos + (Size - Halo.Size) * 0.5f;
+            Halo.Nudge = Nudge;
+            Halo.Strength = 0.35f + Glow * 1.3f;
+            Halo.MarkDirtyRepaint();
         }
     }
 
@@ -319,10 +227,17 @@ namespace Ekqo.Game
         {
             _concept = concept;
             pickingMode = PickingMode.Ignore;
-            generateVisualContent += Paint;
+            var sprite = PixelArt.PictureFor(concept);
+            if (sprite != null)
+            {
+                // Pixel art from PixelArt.txt (pic_<word>); the drawing below is the fallback.
+                PixelArt.Show(this, sprite);
+                AddToClassList("pixel-fit");
+            }
+            else generateVisualContent += Paint;
         }
 
-        public static bool Has(string concept) => concept != null && Known.Contains(concept);
+        public static bool Has(string concept) => concept != null && (Known.Contains(concept) || PixelArt.PictureFor(concept) != null);
 
         private static readonly HashSet<string> Known = new HashSet<string>
         {
@@ -385,8 +300,8 @@ namespace Ekqo.Game
                     Draw.Circle(p, c, s * 0.4f, new Color(1f, 0.97f, 0.8f));
                     break;
                 case "time.night":
-                    Draw.Circle(p, c, s * 0.95f, GardenView.Sky);
-                    Draw.Moon(p, c + new Vector2(-s * 0.1f, 0), s * 0.45f, new Color(1f, 0.95f, 0.7f), GardenView.Sky);
+                    Draw.Circle(p, c, s * 0.95f, Night.Sky);
+                    Draw.Moon(p, c + new Vector2(-s * 0.1f, 0), s * 0.45f, new Color(1f, 0.95f, 0.7f), Night.Sky);
                     Draw.Star(p, c + new Vector2(s * 0.5f, -s * 0.4f), s * 0.12f, sun);
                     Draw.Star(p, c + new Vector2(s * 0.45f, s * 0.4f), s * 0.09f, sun);
                     break;
@@ -468,7 +383,13 @@ namespace Ekqo.Game
         {
             _kind = kind;
             pickingMode = PickingMode.Ignore;
-            generateVisualContent += Paint;
+            var sprite = kind == Kind.WordBook ? "book" : kind == Kind.Jar ? "jar" : kind == Kind.Page ? "page" : null;
+            if (sprite != null && PixelArt.Has(sprite))
+            {
+                PixelArt.Show(this, sprite);
+                AddToClassList("pixel-fit");
+            }
+            else generateVisualContent += Paint;
         }
 
         private void Paint(MeshGenerationContext ctx)

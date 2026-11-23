@@ -50,8 +50,9 @@ namespace Ekqo.Game
         private float _time;
 
         // Screen
-        private VisualElement _root, _ui, _ekqoBox, _bubble, _hearButton, _nextButton;
-        private GardenView _garden;
+        private VisualElement _root, _ui, _bubble, _hearButton, _nextButton;
+        private PixelWorld _world;
+        private PixelSprite _child;
         private BushView _bush;
         private EkqoView _ekqo;
         private FallingLight _fall;
@@ -60,7 +61,9 @@ namespace Ekqo.Game
         private bool _nextPressed;
         private Func<IEnumerator> _hearAgain;
 
-        private const float EkqoHidden = 240, EkqoOut = 370;
+        // Places in Grandma's garden (map pixels, from Garden.txt).
+        private Vector2 _ekqoHidden, _ekqoOut, _childStart, _childCorner, _childStop, _focus;
+        private const float WalkSpeed = 42;   // map pixels a second
 
         // ---------- start ----------
 
@@ -135,13 +138,13 @@ namespace Ekqo.Game
         {
             var dt = Time.deltaTime;
             _time += dt;
-            _garden?.Tick(_time);
             _bush?.Tick(_time);
             if (_ekqo != null)
             {
                 _ekqo.Talk = _voice != null && _voice.Speaking && _talking ? 1 : 0;
                 _ekqo.Tick(_time, dt);
             }
+            _world?.Layout();
             _fall?.MarkDirtyRepaint();
             // Needs rise with active play only (Q1 has none unlocked yet).
             _engine?.Tick(dt);
@@ -194,6 +197,7 @@ namespace Ekqo.Game
         {
             ClearUI();
             var box = Layer();
+            box.AddToClassList("veil");
             box.style.justifyContent = Justify.Center;
             box.style.alignItems = Align.Center;
             var chapter = _bundle.Core.World.Chapters.FirstOrDefault(c => c.Quests.Contains(questId));
@@ -246,6 +250,7 @@ namespace Ekqo.Game
         private IEnumerator Scene(Step step)
         {
             ClearUI();
+            if (_child.Pos != _childStop) yield return WalkToBush();
             var caption = Text(LineText.CleanMeaning(step.Meaning), "caption");
             _ui.Add(caption);
             yield return new WaitForSeconds(0.8f);
@@ -263,6 +268,37 @@ namespace Ekqo.Game
             _fall.Progress = -1;
             yield return English(caption.text);
             yield return WaitNext();
+        }
+
+        /// <summary>The child walks out of Grandma's door, down the path to the bush, and the camera follows.</summary>
+        private IEnumerator WalkToBush()
+        {
+            _child.Pos = _childStart;
+            yield return Walk(_childCorner, "child_down", "child_down_step", false);
+            yield return Walk(_childStop, "child_side", "child_side_step", false);
+            _child.SetSprite("child_side");
+            var from = _world.Focus;
+            for (var t = 0f; t < 1; t += Time.deltaTime * 1.5f)
+            {
+                _world.Focus = Vector2.Lerp(from, _focus, Mathf.SmoothStep(0, 1, t));
+                yield return null;
+            }
+            _world.Focus = _focus;
+        }
+
+        private IEnumerator Walk(Vector2 to, string still, string step, bool left)
+        {
+            _child.FaceLeft(left);
+            var steps = 0f;
+            while (_child.Pos != to)
+            {
+                _child.Pos = Vector2.MoveTowards(_child.Pos, to, WalkSpeed * Time.deltaTime);
+                steps += Time.deltaTime;
+                _child.SetSprite(Mathf.FloorToInt(steps / 0.18f) % 2 == 0 ? still : step);
+                _world.Focus = _child.Pos + new Vector2(8, 8);
+                yield return null;
+            }
+            _child.SetSprite(still);
         }
 
         // ---------- teaching: hear, show, echo ----------
@@ -466,13 +502,13 @@ namespace Ekqo.Game
         {
             _ekqo.TargetGlow = 0.8f;
             _bush.Shake = 1;
-            var from = EkqoHidden;
+            var from = _ekqo.Pos;
             for (var t = 0f; t < 1; t += Time.deltaTime * 1.2f)
             {
-                _ekqoBox.style.bottom = Mathf.Lerp(from, EkqoOut, Mathf.SmoothStep(0, 1, t));
+                _ekqo.Pos = Vector2.Lerp(from, _ekqoOut, Mathf.SmoothStep(0, 1, t));
                 yield return null;
             }
-            _ekqoBox.style.bottom = EkqoOut;
+            _ekqo.Pos = _ekqoOut;
         }
 
         // ---------- review ----------
@@ -558,31 +594,31 @@ namespace Ekqo.Game
             _root = doc.rootVisualElement;
             _root.style.position = Position.Absolute;
             _root.style.left = 0; _root.style.top = 0; _root.style.right = 0; _root.style.bottom = 0;
-            _root.style.backgroundColor = GardenView.Sky;
+            _root.style.backgroundColor = Night.Sky;
             var styles = Resources.Load<StyleSheet>("QuestStyles");
             if (styles != null) _root.styleSheets.Add(styles);
             else Debug.LogError("[Quest] Resources/QuestStyles.uss is missing.");
 
-            _garden = new GardenView();
-            _root.Add(_garden);
+            // Grandma's garden at night, top-down (Resources/Garden.txt and PixelArt.txt).
+            var map = PixelMap.Load("Garden", true);
+            _world = new PixelWorld(map);
+            _root.Add(_world);
+            var bushAt = map.Mark("ekqo_bush");
+            _ekqoHidden = bushAt + new Vector2(4, 4);     // only his tuft shows over the bush
+            _ekqoOut = bushAt + new Vector2(4, -16);      // floating above the bush
+            _childStart = map.Mark("door") + new Vector2(0, 16);
+            _childStop = map.Mark("player_stop");
+            _childCorner = new Vector2(_childStart.x, _childStop.y);
+            _focus = map.Mark("focus") + new Vector2(8, 8);
 
-            _ekqoBox = new VisualElement { pickingMode = PickingMode.Ignore };
-            _ekqoBox.style.position = Position.Absolute;
-            _ekqoBox.style.width = 260; _ekqoBox.style.height = 260;
-            _ekqoBox.style.left = Length.Percent(50);
-            _ekqoBox.style.marginLeft = -130;
+            _child = new PixelSprite("child_side");
+            _child.style.unityBackgroundImageTintColor = Night.Character;
+            _world.Place(_child);
             _ekqo = new EkqoView();
-            _ekqo.AddToClassList("layer");
-            _ekqoBox.Add(_ekqo);
-            _root.Add(_ekqoBox);
-
-            _bush = new BushView();
-            _bush.style.position = Position.Absolute;
-            _bush.style.width = 420; _bush.style.height = 200;
-            _bush.style.left = Length.Percent(50);
-            _bush.style.marginLeft = -210;
-            _bush.style.bottom = 170;
-            _root.Add(_bush);
+            _world.Place(_ekqo.Halo);
+            _world.Place(_ekqo);
+            _bush = new BushView(bushAt);
+            _world.Place(_bush);
 
             _fall = new FallingLight();
             _root.Add(_fall);
@@ -593,9 +629,10 @@ namespace Ekqo.Game
             _bubble = new VisualElement();
             _bubble.AddToClassList("bubble");
             _bubbleSpeaker = new MixedText(font, "bubble__speaker");
-            _bubbleSpeaker.style.alignSelf = Align.FlexStart;
+            _bubbleSpeaker.AddToClassList("bubble__name");
             _bubble.Add(_bubbleSpeaker);
             _bubbleText = new MixedText(font, "bubble__text");
+            _bubbleText.AddToClassList("bubble__line");
             _bubble.Add(_bubbleText);
             _bubbleSupport = Text("", "bubble__support", "hint");
             _bubble.Add(_bubbleSupport);
@@ -626,7 +663,12 @@ namespace Ekqo.Game
         {
             _ekqo.Sleepy = false;
             _ekqo.Glow = _ekqo.TargetGlow = 0.12f;
-            _ekqoBox.style.bottom = EkqoHidden;
+            _ekqo.Pos = _ekqoHidden;
+            // The child starts at Grandma's door and walks out in the opening scene.
+            _child.Pos = _childStart;
+            _child.FaceLeft(false);
+            _child.SetSprite("child_down");
+            _world.Focus = _childStart + new Vector2(8, 8);
             _fall.Progress = -1;
         }
 
@@ -674,7 +716,9 @@ namespace Ekqo.Game
         private void ShowBubble(string speaker, string text, string support)
         {
             _bubble.RemoveFromClassList("hidden");
-            _bubbleSpeaker.SetText(speaker != null ? _text.Name(speaker) : "");
+            var name = speaker != null ? _text.Name(speaker) : "";
+            _bubbleSpeaker.SetText(name);
+            _bubbleSpeaker.EnableInClassList("hidden", string.IsNullOrEmpty(name));
             _bubbleText.SetText(text);
             _bubbleText.EnableInClassList("hidden", string.IsNullOrEmpty(text));
             _bubbleSupport.text = support ?? "";
@@ -797,7 +841,7 @@ namespace Ekqo.Game
         private void Burst()
         {
             var rb = _root.worldBound;
-            var c = _ekqoBox.worldBound.center;
+            var c = _ekqo.worldBound.center;
             if (rb.width <= 0) return;
             _fall.From = _fall.To = new Vector2((c.x - rb.x) / rb.width, (c.y - rb.y) / rb.height);
             StartCoroutine(BurstAnim());
