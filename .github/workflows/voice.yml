@@ -1,0 +1,44 @@
+# Records every line, word and answer with Azure's neural voices and commits the MP3s to
+# game/Assets/StreamingAssets/voice/. Run it from the Actions tab (Render voice → Run workflow)
+# after content changes, then pull and rebuild the game in Unity.
+# Needs two repository secrets (Settings → Secrets and variables → Actions):
+#   AZURE_SPEECH_KEY     Key 1 of your Azure Speech resource
+#   AZURE_SPEECH_REGION  its Location/Region, for example southeastasia
+# Only new or changed lines are recorded, so later runs are quick.
+name: Render voice
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: voice-${{ github.ref }}
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm content:build
+      - name: Record voice lines
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+        run: pnpm voice:render
+      - name: Commit the clips
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898729+github-actions[bot]@users.noreply.github.com"
+          git add game/Assets/StreamingAssets/voice
+          if git diff --cached --quiet; then echo "No new clips."; exit 0; fi
+          git commit -m "Render voice lines"
+          git push

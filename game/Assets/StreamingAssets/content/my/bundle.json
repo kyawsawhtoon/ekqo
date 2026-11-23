@@ -1,6 +1,6 @@
 {
  "schema": "ekqo.bundle/1",
- "version": "0d2caf8fdc7d",
+ "version": "e05b90984a80",
  "core": {
   "world": {
    "schema": "ekqo.world/1",
@@ -535,6 +535,16 @@
     {
      "id": "phrase.go_home",
      "gloss": "go home",
+     "kind": "phrase"
+    },
+    {
+     "id": "phrase.come_to_my_house",
+     "gloss": "come to my house",
+     "kind": "phrase"
+    },
+    {
+     "id": "phrase.sleep_there",
+     "gloss": "you can sleep there",
      "kind": "phrase"
     },
     {
@@ -1708,7 +1718,8 @@
      "time.night",
      "place.garden",
      "phrase.dont_be_scared",
-     "greet.bye"
+     "phrase.come_to_my_house",
+     "phrase.sleep_there"
     ],
     "patterns": [
      "pat.my_name_is",
@@ -1754,12 +1765,10 @@
       ]
      },
      {
-      "id": "teach_greeting",
+      "id": "teach_hello",
       "type": "teach",
       "concepts": [
-       "greet.hello",
-       "ans.yes",
-       "ans.no"
+       "greet.hello"
       ]
      },
      {
@@ -1841,11 +1850,11 @@
      },
      {
       "id": "say_scared",
-      "meaning": "Ekqo asks: are you scared? The child answers yes or no.",
+      "meaning": "Ekqo asks: are you scared? The child says they are scared, or not.",
       "type": "say",
       "speaker": "ekqo",
       "expects": {
-       "intent": "answers yes or no",
+       "intent": "says whether they are scared",
        "any_of": [
         "ans.yes",
         "ans.no"
@@ -1867,6 +1876,52 @@
       ]
      },
      {
+      "id": "teach_no",
+      "type": "teach",
+      "concepts": [
+       "ans.no"
+      ]
+     },
+     {
+      "id": "say_not_star",
+      "meaning": "Ekqo asks: are you a star too? The child says no.",
+      "type": "say",
+      "speaker": "ekqo",
+      "expects": {
+       "intent": "says no, they are not a star",
+       "concepts": [
+        "ans.no"
+       ]
+      },
+      "ai": {
+       "npc_vary": false,
+       "judge": "meaning"
+      }
+     },
+     {
+      "id": "teach_yes",
+      "type": "teach",
+      "concepts": [
+       "ans.yes"
+      ]
+     },
+     {
+      "id": "say_your_garden",
+      "meaning": "Ekqo asks: is this your garden? The child says yes.",
+      "type": "say",
+      "speaker": "ekqo",
+      "expects": {
+       "intent": "says yes",
+       "concepts": [
+        "ans.yes"
+       ]
+      },
+      "ai": {
+       "npc_vary": false,
+       "judge": "meaning"
+      }
+     },
+     {
       "id": "word_book",
       "meaning": "The child gets the word book.",
       "type": "reward",
@@ -1876,14 +1931,44 @@
       ]
      },
      {
-      "id": "say_bye",
-      "meaning": "Ekqo yawns. The child says bye for tonight.",
+      "id": "sleepy",
+      "meaning": "(yawning) I'm sleepy...",
+      "type": "line",
+      "speaker": "ekqo"
+     },
+     {
+      "id": "teach_home",
+      "type": "teach",
+      "concepts": [
+       "phrase.come_to_my_house",
+       "phrase.sleep_there"
+      ]
+     },
+     {
+      "id": "say_come_home",
+      "meaning": "The child tells sleepy Ekqo to come to their house.",
       "type": "say",
       "speaker": "ekqo",
       "expects": {
-       "intent": "says bye or good night",
-       "any_of": [
-        "greet.bye"
+       "intent": "asks Ekqo to come home with them",
+       "concepts": [
+        "phrase.come_to_my_house"
+       ]
+      },
+      "ai": {
+       "npc_vary": false,
+       "judge": "meaning"
+      }
+     },
+     {
+      "id": "say_sleep_there",
+      "meaning": "The child tells Ekqo he can sleep there.",
+      "type": "say",
+      "speaker": "ekqo",
+      "expects": {
+       "intent": "tells Ekqo he can sleep there",
+       "concepts": [
+        "phrase.sleep_there"
        ]
       },
       "ai": {
@@ -3811,6 +3896,14 @@
      "text": "တာ့တာ"
     },
     {
+     "concept": "phrase.come_to_my_house",
+     "text": "အိမ်ကို လိုက်ခဲ့"
+    },
+    {
+     "concept": "phrase.sleep_there",
+     "text": "အဲဒီမှာ အိပ်လို့ရတယ်"
+    },
+    {
      "concept": "q.who",
      "text": "ဘယ်သူလဲ"
     },
@@ -4478,7 +4571,8 @@
      "word.name",
      "ans.yes",
      "ans.no",
-     "greet.bye"
+     "phrase.come_to_my_house",
+     "phrase.sleep_there"
     ],
     "hear": [
      "q.who",
@@ -4532,12 +4626,36 @@
       "support": "I fell from the sky... from the stars...",
       "status": "draft"
      },
-     "say_bye": {
-      "prompt": "အိပ်ချင်တယ်...",
-      "support": "I'm sleepy...",
+     "say_not_star": {
+      "prompt": "ကြယ်လား",
+      "support": "Are you a star too?",
       "accept": [
-       "တာ့တာ",
-       "အိပ်တော့"
+       "မဟုတ်ဘူး"
+      ],
+      "status": "draft"
+     },
+     "say_your_garden": {
+      "prompt": "ဒါ မင်းခြံလား",
+      "support": "Is this your garden?",
+      "accept": [
+       "ဟုတ်ကဲ့"
+      ],
+      "status": "draft"
+     },
+     "sleepy": {
+      "text": "အိပ်ချင်တယ်...",
+      "support": "I'm sleepy...",
+      "status": "draft"
+     },
+     "say_come_home": {
+      "accept": [
+       "အိမ်ကို လိုက်ခဲ့"
+      ],
+      "status": "draft"
+     },
+     "say_sleep_there": {
+      "accept": [
+       "အဲဒီမှာ အိပ်လို့ရတယ်"
       ],
       "status": "draft"
      }

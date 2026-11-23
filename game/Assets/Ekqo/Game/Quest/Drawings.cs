@@ -328,6 +328,7 @@ namespace Ekqo.Game
         {
             "greet.hello", "greet.bye", "ans.yes", "ans.no", "word.name", "sky.star", "nature.light",
             "time.night", "place.garden", "q.who", "phrase.dont_be_scared",
+            "phrase.come_to_my_house", "phrase.sleep_there",
         };
 
         private void Paint(MeshGenerationContext ctx)
@@ -402,6 +403,28 @@ namespace Ekqo.Game
                     Draw.ArcStroke(p, c + new Vector2(0, -s * 0.25f), s * 0.28f, 180, 400, Color.white, s * 0.16f);
                     Draw.Stroke(p, Color.white, s * 0.16f, c + new Vector2(0, s * 0.03f), c + new Vector2(0, s * 0.2f));
                     Draw.Circle(p, c + new Vector2(0, s * 0.48f), s * 0.1f, Color.white);
+                    break;
+                case "phrase.come_to_my_house":
+                    // A house with a lit door and a little path.
+                    p.fillColor = new Color(0.85f, 0.45f, 0.4f);
+                    p.BeginPath();
+                    p.MoveTo(c + new Vector2(-s * 0.95f, -s * 0.1f));
+                    p.LineTo(c + new Vector2(0, -s * 0.9f));
+                    p.LineTo(c + new Vector2(s * 0.95f, -s * 0.1f));
+                    p.ClosePath();
+                    p.Fill();
+                    Draw.Rect(p, new Rect(c.x - s * 0.7f, c.y - s * 0.12f, s * 1.4f, s * 0.9f), new Color(0.98f, 0.88f, 0.7f));
+                    Draw.RoundRect(p, new Rect(c.x - s * 0.18f, c.y + s * 0.25f, s * 0.36f, s * 0.53f), s * 0.08f, new Color(1f, 0.82f, 0.4f));
+                    Draw.Rect(p, new Rect(c.x + s * 0.3f, c.y + s * 0.05f, s * 0.28f, s * 0.24f), new Color(0.55f, 0.75f, 0.95f));
+                    break;
+                case "phrase.sleep_there":
+                    // A little bed under the moon, with "z z".
+                    Draw.RoundRect(p, new Rect(c.x - s * 0.9f, c.y + s * 0.05f, s * 1.8f, s * 0.45f), s * 0.12f, new Color(0.55f, 0.65f, 0.95f));
+                    Draw.RoundRect(p, new Rect(c.x - s * 0.85f, c.y - s * 0.12f, s * 0.5f, s * 0.3f), s * 0.12f, Color.white);
+                    Draw.Rect(p, new Rect(c.x - s * 0.95f, c.y - s * 0.3f, s * 0.12f, s * 1.0f), new Color(0.6f, 0.42f, 0.3f));
+                    Draw.Rect(p, new Rect(c.x + s * 0.83f, c.y, s * 0.12f, s * 0.7f), new Color(0.6f, 0.42f, 0.3f));
+                    Draw.Moon(p, c + new Vector2(s * 0.45f, -s * 0.6f), s * 0.25f, new Color(1f, 0.92f, 0.6f), new Color(0.98f, 0.95f, 0.88f));
+                    Draw.Stroke(p, ink, 4, c + new Vector2(-s * 0.1f, -s * 0.6f), c + new Vector2(s * 0.08f, -s * 0.6f), c + new Vector2(-s * 0.1f, -s * 0.42f), c + new Vector2(s * 0.08f, -s * 0.42f));
                     break;
                 case "phrase.dont_be_scared":
                     Heart(p, c, s * 0.8f, new Color(1f, 0.5f, 0.6f));

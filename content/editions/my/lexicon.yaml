@@ -11,6 +11,8 @@ entries:
   - { concept: ans.yes,       text: ဟုတ်ကဲ့ }
   - { concept: ans.no,        text: မဟုတ်ဘူး }
   - { concept: greet.bye,     text: တာ့တာ }
+  - { concept: phrase.come_to_my_house, text: အိမ်ကို လိုက်ခဲ့ }
+  - { concept: phrase.sleep_there, text: အဲဒီမှာ အိပ်လို့ရတယ် }
   - { concept: q.who,         text: ဘယ်သူလဲ }
   - { concept: nature.light,  text: အလင်း }
   - { concept: sky.star,      text: ကြယ် }

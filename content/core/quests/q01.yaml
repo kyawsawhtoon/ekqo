@@ -7,7 +7,7 @@ location: house.garden
 time_of_day: night
 characters: [ekqo]
 function: "Greeting; saying your name; yes and no"
-topics: [greet.hello, word.name, q.who, ans.yes, ans.no, nature.light, sky.star, time.night, place.garden, phrase.dont_be_scared, greet.bye]
+topics: [greet.hello, word.name, q.who, ans.yes, ans.no, nature.light, sky.star, time.night, place.garden, phrase.dont_be_scared, phrase.come_to_my_house, phrase.sleep_there]
 patterns: [pat.my_name_is, pat.whats_your_name]
 listening_weight: heavy          # Q1-Q3 lean on hear/show/echo with short answers
 reuses: []
@@ -15,12 +15,12 @@ discoveries: [ekqo.name]
 ekqo: { stage_on_start: 1, abilities: [word_book, hint_glow] }
 rewards: [glow_jar]
 steps:
+  # Kyaw's playtest (21 Nov): each word is taught right before the moment that needs it,
+  # yes and no come from Ekqo's own questions, and bedtime is taking Ekqo home, not bye.
   - { id: light_falls,  type: scene, meaning: "First night of the visit. A light falls into Grandma's garden." }
   - { id: whisper_hello, type: line, speaker: ekqo, meaning: "(from under the bushes, very quietly) Hello...", concepts: [greet.hello] }
   - { id: who,          type: line, speaker: ekqo, meaning: "Who is it?", concepts: [q.who] }
-  - id: teach_greeting
-    type: teach
-    concepts: [greet.hello, ans.yes, ans.no]
+  - { id: teach_hello,  type: teach, concepts: [greet.hello] }
   - id: say_hello
     type: say
     speaker: ekqo
@@ -45,11 +45,38 @@ steps:
   - id: say_scared
     type: say
     speaker: ekqo
-    meaning: "Ekqo asks: are you scared? The child answers yes or no."
-    expects: { intent: "answers yes or no", any_of: [ans.yes, ans.no] }
+    meaning: "Ekqo asks: are you scared? The child says they are scared, or not."
+    expects: { intent: "says whether they are scared", any_of: [ans.yes, ans.no] }
     ai: { npc_vary: false, judge: meaning }
   - { id: fell_from_sky, type: line, speaker: ekqo, meaning: "(very sleepily) I fell... from the sky. From the stars.", concepts: [sky.star, nature.light] }
+  - { id: teach_no,     type: teach, concepts: [ans.no] }
+  - id: say_not_star
+    type: say
+    speaker: ekqo
+    meaning: "Ekqo asks: are you a star too? The child says no."
+    expects: { intent: "says no, they are not a star", concepts: [ans.no] }
+    ai: { npc_vary: false, judge: meaning }
+  - { id: teach_yes,    type: teach, concepts: [ans.yes] }
+  - id: say_your_garden
+    type: say
+    speaker: ekqo
+    meaning: "Ekqo asks: is this your garden? The child says yes."
+    expects: { intent: "says yes", concepts: [ans.yes] }
+    ai: { npc_vary: false, judge: meaning }
   - { id: word_book,    type: reward, items: [], abilities: [word_book], meaning: "The child gets the word book." }
-  - { id: say_bye,      type: say, speaker: ekqo, meaning: "Ekqo yawns. The child says bye for tonight.", expects: { intent: "says bye or good night", any_of: [greet.bye] }, ai: { npc_vary: false, judge: meaning } }
+  - { id: sleepy,       type: line, speaker: ekqo, meaning: "(yawning) I'm sleepy..." }
+  - { id: teach_home,   type: teach, concepts: [phrase.come_to_my_house, phrase.sleep_there] }
+  - id: say_come_home
+    type: say
+    speaker: ekqo
+    meaning: "The child tells sleepy Ekqo to come to their house."
+    expects: { intent: "asks Ekqo to come home with them", concepts: [phrase.come_to_my_house] }
+    ai: { npc_vary: false, judge: meaning }
+  - id: say_sleep_there
+    type: say
+    speaker: ekqo
+    meaning: "The child tells Ekqo he can sleep there."
+    expects: { intent: "tells Ekqo he can sleep there", concepts: [phrase.sleep_there] }
+    ai: { npc_vary: false, judge: meaning }
   - { id: review,       type: review }
   - { id: reward,       type: reward, items: [glow_jar] }

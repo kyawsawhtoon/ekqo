@@ -64,14 +64,16 @@ quest engine and the Burmese content bundle. The code is in `Assets/Ekqo/Game/Qu
 **Answers are taps for now.** Each say step shows the right phrase and one other phrase.
 The child says it out loud and taps it. Speech recognition plugs in here later (architecture 4.2).
 
-**Voice.** The game plays a recorded clip when one exists, then the browser's own Burmese
-voice if the tablet has one, and otherwise shows the line without sound. To add clips, put
-MP3s in `Assets/StreamingAssets/voice/my/` named by step or word, such as `q01/who.mp3` or
-`word/greet.hello.mp3`, and list them in `Assets/StreamingAssets/voice/my/voice.json`:
-
-```json
-{ "clips": ["q01/who", "word/greet.hello"] }
-```
+**Voice.** Every line, word and answer is pre-recorded with Azure's Burmese neural voices
+(the voices in `content/editions/my/edition.yaml`). Run **Actions → Render voice → Run workflow**
+on GitHub after content changes; it records only new or changed lines into
+`Assets/StreamingAssets/voice/my/` and commits them. Then pull and rebuild Quest 1. It needs the
+repository secrets `AZURE_SPEECH_KEY` and `AZURE_SPEECH_REGION` (your Azure Speech resource →
+Keys and Endpoint). To record on your own computer instead: `pnpm content:build`, then
+`AZURE_SPEECH_KEY=... AZURE_SPEECH_REGION=... pnpm voice:render`. Lines without a clip fall
+back to the tablet's own Burmese voice, if it has one. Sentences with the child's name are
+shown without sound. When "English help" is on, the English hints are read with the tablet's
+English voice.
 
 The "English help" button in the top corner shows or hides the English hints for grown-ups.
 Progress is saved in the browser at the end of the quest. "Start over as a new player" on

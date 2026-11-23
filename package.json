@@ -6,6 +6,7 @@
   "scripts": {
     "content:validate": "pnpm --filter @ekqo/content validate",
     "content:build": "pnpm --filter @ekqo/content build",
+    "voice:render": "pnpm --filter @ekqo/pipeline voice",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test"
   }

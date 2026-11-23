@@ -261,6 +261,7 @@ namespace Ekqo.Game
                 yield return null;
             }
             _fall.Progress = -1;
+            yield return English(caption.text);
             yield return WaitNext();
         }
 
@@ -278,6 +279,7 @@ namespace Ekqo.Game
                 _ui.Add(WordCard(c, word, _text.Gloss(c)));
                 SetInstruction("Listen to Ekqo", null);
                 yield return Speak("ekqo", $"word/{c}", word);
+                yield return English(_text.Gloss(c));
                 _hearAgain = () => Speak("ekqo", $"word/{c}", word);
                 yield return WaitNext();
             }
@@ -391,6 +393,7 @@ namespace Ekqo.Game
                 yield return SayLine(step.Speaker, prompt.Text, prompt.Support, $"{_quest.Id}/{step.Id}");
             }
             SetInstruction("Your turn! Say it out loud, then tap it.", LineText.CleanMeaning(step.Meaning));
+            yield return English("Your turn! Say it out loud, then tap it.");
 
             var options = Shuffle(_text.Options(_quest.Id, step));
             var sides = ChoiceColumns();
@@ -737,6 +740,7 @@ namespace Ekqo.Game
             if (!string.IsNullOrEmpty(note)) panel.Add(Text(note, "panel__text"));
             _ui.Add(panel);
             Burst();
+            yield return English($"{title} {text}");
             yield return WaitNext();
         }
 
@@ -760,6 +764,13 @@ namespace Ekqo.Game
             ShowBubble(speaker, text, support);
             _hearAgain = () => Speak(speaker, voiceKey, text);
             yield return Speak(speaker, voiceKey, text);
+            yield return English(support);
+        }
+
+        /// <summary>Reads an English hint aloud when "English help" is on.</summary>
+        private IEnumerator English(string text)
+        {
+            if (_hints && !string.IsNullOrEmpty(text)) yield return _voice.SayEnglish(text);
         }
 
         private IEnumerator Speak(string speaker, string key, string text)
