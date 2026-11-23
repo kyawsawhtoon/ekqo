@@ -81,12 +81,12 @@ the last screen clears it.
 
 ## Pixel art
 
-Quest 1 is drawn as a top-down pixel-art world, all original Ekqo art:
+Quest 1 is drawn as a top-down pixel-art world with 32px tiles, all original Ekqo art:
 
-- `Assets/Ekqo/Game/Quest/Resources/PixelArt.txt` holds the colour palette and every 16x16 sprite (tiles, the child walking, Ekqo, word pictures `pic_<word>`, icons), drawn with one letter per pixel. `.` is transparent.
+- `tools/pixelart/generate.py` draws every sprite from simple shapes (tiles, the child walking, Ekqo, word pictures `pic_<word>`, icons), outlines and shades them, and writes `Assets/Ekqo/Game/Quest/Resources/PixelArt.txt`: the palette plus each sprite with one letter per pixel (`.` is transparent). Change the art in `generate.py` and run `python3 tools/pixelart/generate.py`.
 - `Assets/Ekqo/Game/Quest/Resources/Garden.txt` is Grandma's garden as a tile map, plus marks (`@door`, `@player_stop`, `@ekqo_bush`, `@focus`) that place the child, Ekqo and the camera.
-- `PixelArt.cs` turns them into crisp (point-filtered) textures when the game starts. A new concept gets its picture by adding `sprite pic_<name>` (for example `pic_hello` for `greet.hello`); concepts without one fall back to the drawings in `Drawings.cs`.
-- To check a change without Unity: `python3 tools/pixelart/preview.py /tmp` (needs Pillow) validates the files and writes `sprites.png` and `garden.png`.
+- `PixelArt.cs` turns them into crisp (point-filtered) textures when the game starts. A new concept gets its picture from a `pic_<name>` sprite (for example `pic_hello` for `greet.hello`); concepts without one fall back to the drawings in `Drawings.cs`.
+- To check the art without Unity: `python3 tools/pixelart/preview.py /tmp` (needs Pillow) validates both files and writes `sprites.png` and `garden.png`.
 
 ## Layout
 

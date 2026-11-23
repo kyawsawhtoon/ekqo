@@ -108,22 +108,21 @@ namespace Ekqo.Game
         public static readonly Color Character = Color.Lerp(Color.white, PixelArt.NightTint, 0.45f);
     }
 
-    /// <summary>The big bush Ekqo hides in: the bush sprite two tiles wide. Rustles when Shake &gt; 0.</summary>
+    /// <summary>The big bush Ekqo hides in (bush_big). Rustles when Shake &gt; 0.</summary>
     internal sealed class BushView : PixelSprite
     {
         public float Shake;
 
-        public BushView(Vector2 pos) : base("bush")
+        public BushView(Vector2 pos) : base("bush_big")
         {
             Pos = pos;
-            Size = new Vector2(32, 32);
             style.unityBackgroundImageTintColor = PixelArt.NightTint;
         }
 
         public void Tick(float time)
         {
             Shake = Mathf.MoveTowards(Shake, 0, 0.02f);
-            Nudge = new Vector2(Mathf.Sin(time * 30) * 1.5f * Shake, 0);
+            Nudge = new Vector2(Mathf.Round(Mathf.Sin(time * 30) * 3 * Shake), 0);
         }
     }
 
@@ -134,7 +133,7 @@ namespace Ekqo.Game
 
         public HaloView()
         {
-            Size = new Vector2(56, 56);
+            Size = new Vector2(100, 100);
             generateVisualContent += Paint;
         }
 
@@ -161,7 +160,6 @@ namespace Ekqo.Game
 
         public EkqoView() : base("ekqo_dim")
         {
-            Size = new Vector2(24, 24);
         }
 
         public void Tick(float time, float dt)
@@ -169,7 +167,7 @@ namespace Ekqo.Game
             Glow = Mathf.MoveTowards(Glow, TargetGlow, dt * 0.6f);
             Happy = Mathf.MoveTowards(Happy, 0, dt * 0.8f);
             SetSprite(Sleepy ? "ekqo_sleepy" : Glow < 0.3f ? "ekqo_dim" : "ekqo");
-            var bob = Mathf.Sin(time * (Sleepy ? 1.2f : 2.4f)) * (Sleepy ? 0.6f : 1.2f) - Mathf.Abs(Mathf.Sin(time * 10)) * 6 * Happy;
+            var bob = Mathf.Sin(time * (Sleepy ? 1.2f : 2.4f)) * (Sleepy ? 1.2f : 2.4f) - Mathf.Abs(Mathf.Sin(time * 10)) * 12 * Happy;
             Nudge = new Vector2(0, Mathf.Round(bob));
             var s = Talk > 0 ? Mathf.Abs(Mathf.Sin(time * 14)) * Talk : 0;
             style.scale = new Scale(new Vector3(1 + 0.08f * s, 1 - 0.08f * s, 1));

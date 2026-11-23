@@ -63,7 +63,7 @@ namespace Ekqo.Game
 
         // Places in Grandma's garden (map pixels, from Garden.txt).
         private Vector2 _ekqoHidden, _ekqoOut, _childStart, _childCorner, _childStop, _focus;
-        private const float WalkSpeed = 42;   // map pixels a second
+        private const float WalkSpeed = 84;   // map pixels a second (two and a half tiles)
 
         // ---------- start ----------
 
@@ -295,7 +295,7 @@ namespace Ekqo.Game
                 _child.Pos = Vector2.MoveTowards(_child.Pos, to, WalkSpeed * Time.deltaTime);
                 steps += Time.deltaTime;
                 _child.SetSprite(Mathf.FloorToInt(steps / 0.18f) % 2 == 0 ? still : step);
-                _world.Focus = _child.Pos + new Vector2(8, 8);
+                _world.Focus = _child.Pos + new Vector2(PixelArt.Tile / 2f, PixelArt.Tile / 2f);
                 yield return null;
             }
             _child.SetSprite(still);
@@ -604,12 +604,12 @@ namespace Ekqo.Game
             _world = new PixelWorld(map);
             _root.Add(_world);
             var bushAt = map.Mark("ekqo_bush");
-            _ekqoHidden = bushAt + new Vector2(4, 4);     // only his tuft shows over the bush
-            _ekqoOut = bushAt + new Vector2(4, -16);      // floating above the bush
-            _childStart = map.Mark("door") + new Vector2(0, 16);
+            _ekqoHidden = bushAt + new Vector2(6, 8);     // only his tuft shows over the bush
+            _ekqoOut = bushAt + new Vector2(6, -30);      // floating above the bush
+            _childStart = map.Mark("door") + new Vector2(0, PixelArt.Tile);
             _childStop = map.Mark("player_stop");
             _childCorner = new Vector2(_childStart.x, _childStop.y);
-            _focus = map.Mark("focus") + new Vector2(8, 8);
+            _focus = map.Mark("focus") + new Vector2(PixelArt.Tile / 2f, PixelArt.Tile / 2f);
 
             _child = new PixelSprite("child_side");
             _child.style.unityBackgroundImageTintColor = Night.Character;
@@ -668,7 +668,7 @@ namespace Ekqo.Game
             _child.Pos = _childStart;
             _child.FaceLeft(false);
             _child.SetSprite("child_down");
-            _world.Focus = _childStart + new Vector2(8, 8);
+            _world.Focus = _childStart + new Vector2(PixelArt.Tile / 2f, PixelArt.Tile / 2f);
             _fall.Progress = -1;
         }
 

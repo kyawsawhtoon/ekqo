@@ -5,13 +5,13 @@ using UnityEngine.UIElements;
 namespace Ekqo.Game
 {
     /// <summary>
-    /// Ekqo's pixel art, read from Resources/PixelArt.txt (a palette and 16x16 sprites drawn
-    /// with letters) and Resources/Garden.txt (a tile map). Sprites become point-filtered
+    /// Ekqo's pixel art, read from Resources/PixelArt.txt (a palette and sprites drawn with
+    /// letters, made by tools/pixelart/generate.py) and Resources/Garden.txt (a tile map of 32px tiles). Sprites become point-filtered
     /// textures, so they stay crisp at any size. Preview: python3 tools/pixelart/preview.py
     /// </summary>
     internal static class PixelArt
     {
-        public const int Tile = 16;
+        public const int Tile = 32;
         /// <summary>Night colours: everything is multiplied by this except the light in windows and lanterns.</summary>
         public static readonly Color NightTint = new Color(0.50f, 0.56f, 0.86f);
         private static readonly HashSet<string> LitTiles = new HashSet<string> { "window", "lantern" };
@@ -27,14 +27,18 @@ namespace Ekqo.Game
             return name != null && _sprites.ContainsKey(name);
         }
 
-        /// <summary>The sprite as a 16x16 texture, or null when there is no such sprite.</summary>
+        /// <summary>The sprite as a texture (its own size, usually 32x32), or null when there is no such sprite.</summary>
         public static Texture2D Sprite(string name)
         {
             if (!Has(name)) return null;
             if (Textures.TryGetValue(name, out var tex) && tex != null) return tex;
-            var pixels = new Color32[Tile * Tile];
-            Paint(pixels, Tile, Tile, 0, 0, _sprites[name], null, false);
-            tex = MakeTexture(Tile, Tile, pixels);
+            var rows = _sprites[name];
+            var w = 1;
+            foreach (var r in rows) w = Mathf.Max(w, r.Length);
+            var h = Mathf.Max(1, rows.Length);
+            var pixels = new Color32[w * h];
+            Paint(pixels, w, h, 0, 0, rows, null, false);
+            tex = MakeTexture(w, h, pixels);
             Textures[name] = tex;
             return tex;
         }
@@ -130,7 +134,6 @@ namespace Ekqo.Game
                 {
                     if (section == "sprite" && name != null)
                     {
-                        if (rows.Count != Tile) Debug.LogWarning($"[PixelArt] {name} has {rows.Count} rows, not {Tile}.");
                         _sprites[name] = rows.ToArray();
                     }
                     section = null;
@@ -226,7 +229,7 @@ namespace Ekqo.Game
     internal sealed class PixelWorld : VisualElement
     {
         /// <summary>How many tiles tall the view is at most; fewer tiles means a closer camera.</summary>
-        public float RowsInView = 11;
+        public float RowsInView = 9;
         public Vector2 Focus;
         public float Scale { get; private set; } = 1;
         public Vector2 Offset { get; private set; }
@@ -302,7 +305,10 @@ namespace Ekqo.Game
         {
             pickingMode = PickingMode.Ignore;
             style.position = UnityEngine.UIElements.Position.Absolute;
-            if (sprite != null) SetSprite(sprite);
+            if (sprite == null) return;
+            SetSprite(sprite);
+            var tex = PixelArt.Sprite(sprite);
+            if (tex != null) Size = new Vector2(tex.width, tex.height);   // one art pixel = one map pixel
         }
 
         public void SetSprite(string sprite)
