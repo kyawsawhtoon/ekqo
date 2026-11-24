@@ -1,0 +1,23 @@
+# Grandma's garden at night (Quest 1). One letter per 32x32 tile; the legend names the
+# PixelArt sprite for each letter. Lines starting with @ place things by tile (column row).
+legend v=wall_low g=grass 2=grass2 f=flowers p=path r=roof w=wall n=window d=door x=fence t=tree b=bush l=lantern s=stone
+tgrrrrrrrrrrgtxxxxxxxt
+ggrrrrrrrrrrgggfgg2ggg
+ggrrrrrrrrrrgggggtggfg
+ggwnwwwwwwnwgggggggggg
+ggvvvvdvvvvvlgg2gggggg
+gffgggpgggffgggggggtgg
+ggggggpggggggggggggggg
+gg2gggppppppppsggg2ggg
+tggggggggggggggggfgggg
+ggfggg2ggggggggggggggg
+gggggggggggg2ggggggtgg
+gtggfgggggggggggggfggg
+ggggggggg2gggggggggggg
+gfgggggggggggggggggg2g
+gggg2ggggggggggfgggggg
+xxxxxxxxxxxxxxxxxxxxxx
+@door 6 4
+@player_stop 13 7
+@ekqo_bush 15 7
+@focus 14 7

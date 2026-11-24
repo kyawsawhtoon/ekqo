@@ -24,6 +24,8 @@ concepts:
   - { id: phrase.ill_have,    gloss: "I'll have",           kind: phrase }
   - { id: phrase.ill_buy,     gloss: "I'll buy",            kind: phrase }
   - { id: phrase.go_home,     gloss: "go home",             kind: phrase }
+  - { id: phrase.come_to_my_house, gloss: "come to my house", kind: phrase }
+  - { id: phrase.sleep_there, gloss: "you can sleep there", kind: phrase }
   - { id: phrase.come_back,   gloss: "come back",           kind: phrase }
   - { id: q.how_many,         gloss: "how many?",           kind: phrase }
   - { id: q.how_much,         gloss: "how much?",           kind: phrase }

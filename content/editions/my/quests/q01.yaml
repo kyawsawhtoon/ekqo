@@ -4,7 +4,7 @@
 schema: ekqo.edition-quest/1
 edition: my
 quest: q01
-say: [greet.hello, word.name, ans.yes, ans.no, greet.bye]
+say: [greet.hello, word.name, ans.yes, ans.no, phrase.come_to_my_house, phrase.sleep_there]
 hear: [q.who, nature.light, sky.star, time.night, place.garden, phrase.dont_be_scared]
 lines:
   whisper_hello:  { text: "မင်္ဂလာပါ...", status: draft }
@@ -16,8 +16,13 @@ lines:
   say_scared:
     prompt: "ကြောက်လား"
     support: "Are you scared?"
-    accept: [ဟုတ်ကဲ့, မဟုတ်ဘူး, ကြောက်တယ်, မကြောက်ဘူး]
+    accept: [ကြောက်တယ်, မကြောက်ဘူး, ဟုတ်ကဲ့, မဟုတ်ဘူး]
+    tap: [ကြောက်တယ်, မကြောက်ဘူး]
     status: draft
-    note: "Natural answers are ကြောက်တယ် / မကြောက်ဘူး; the approved list teaches ဟုတ်ကဲ့ / မဟုတ်ဘူး, so both are accepted. Reviewer to confirm."
+    note: "Kyaw (21 Nov): the answers are ကြောက်တယ် / မကြောက်ဘူး, so those are the tap choices. ဟုတ်ကဲ့ / မဟုတ်ဘူး are still accepted when spoken."
   fell_from_sky:  { text: "ကောင်းကင်ပေါ်က ကျလာတာ... ကြယ်တွေဆီက...", support: "I fell from the sky... from the stars...", status: draft }
-  say_bye:        { prompt: "အိပ်ချင်တယ်...", support: "I'm sleepy...", accept: [တာ့တာ, အိပ်တော့], status: draft }
+  say_not_star:   { prompt: "ကြယ်လား", support: "Are you a star too?", accept: [မဟုတ်ဘူး], status: draft }
+  say_your_garden: { prompt: "ဒါ မင်းခြံလား", support: "Is this your garden?", accept: [ဟုတ်ကဲ့], status: draft }
+  sleepy:         { text: "အိပ်ချင်တယ်...", support: "I'm sleepy...", status: draft }
+  say_come_home:  { accept: [အိမ်ကို လိုက်ခဲ့], status: draft }
+  say_sleep_there: { accept: [အဲဒီမှာ အိပ်လို့ရတယ်], status: draft }

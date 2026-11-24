@@ -8,9 +8,12 @@ namespace Ekqo.Speech
 {
     /// <summary>
     /// Plays a line out loud (architecture S7). In order:
-    /// 1. a pre-rendered or recorded clip listed in StreamingAssets/voice/&lt;edition&gt;/voice.json,
+    /// 1. a pre-rendered clip listed in StreamingAssets/voice/&lt;edition&gt;/voice.json. Clips are
+    ///    named by voice and a hash of the text ("ekqo/1a2b3c4d.mp3"), so any line, word or
+    ///    answer the content has can be pre-rendered by tools/pipeline (pnpm voice:render),
     /// 2. the browser's own text-to-speech, if it has a voice for the locale,
     /// 3. nothing: the line is still shown, and Ekqo moves his mouth.
+    /// English hints use the browser's English voice (SayEnglish).
     /// </summary>
     public sealed class VoiceService : MonoBehaviour
     {
@@ -61,6 +64,9 @@ namespace Ekqo.Speech
         {
             Stop();
             Speaking = true;
+            // Clips are found by voice and text, so the key from the caller is only a fallback name.
+            var hashed = string.IsNullOrEmpty(text) ? null : ClipKey(speaker, text);
+            if (hashed != null && _clips.Contains(hashed)) key = hashed;
             try
             {
                 if (key != null && _clips.Contains(key))
@@ -99,6 +105,39 @@ namespace Ekqo.Speech
             finally
             {
                 Speaking = false;
+            }
+        }
+
+        /// <summary>Reads an English hint with the browser's English voice. Does nothing without one.</summary>
+        public IEnumerator SayEnglish(string text)
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            if (string.IsNullOrEmpty(text) || EkqoVoice_HasVoice("en-US") != 1) yield break;
+            Stop();
+            Speaking = true;
+            EkqoVoice_Speak(text, "en-US", 0.95f, 1f);
+            var started = Time.realtimeSinceStartup;
+            while (EkqoVoice_IsSpeaking() == 0 && Time.realtimeSinceStartup - started < 1f) yield return null;
+            while (EkqoVoice_IsSpeaking() == 1 && Time.realtimeSinceStartup - started < 10f) yield return null;
+            Speaking = false;
+#else
+            yield break;
+#endif
+        }
+
+        /// <summary>
+        /// The clip name for a line: the voice (the speaking character; the child's answers and
+        /// teaching use Ekqo's voice) and an FNV-1a hash of the trimmed text. tools/pipeline uses
+        /// the same rule (voiceKey in voice.ts).
+        /// </summary>
+        public static string ClipKey(string speaker, string text)
+        {
+            var voice = string.IsNullOrEmpty(speaker) || speaker == "child" ? "ekqo" : speaker;
+            unchecked
+            {
+                var h = 2166136261u;
+                foreach (var ch in text.Trim()) { h ^= ch; h *= 16777619u; }
+                return $"{voice}/{h:x8}";
             }
         }
 

@@ -1,0 +1,13 @@
+{
+  "name": "@ekqo/pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Ekqo content pipeline: voice pre-rendering (drafting and review to come)",
+  "scripts": {
+    "voice": "tsx src/voice.ts ../../build/content ../../game/Assets/StreamingAssets/voice",
+    "typecheck": "tsc -p .",
+    "test": "tsx src/voice.test.ts"
+  },
+  "devDependencies": { "@types/node": "^22.0.0", "tsx": "^4.19.0", "typescript": "^5.6.0" }
+}
