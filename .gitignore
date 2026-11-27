@@ -14,3 +14,8 @@ game/Assets/Ekqo/Game/Quest/Quest1.unity.meta
 
 node_modules/
 build/
+
+# The web builds in site/ must always be committed, even when a global gitignore
+# (for example a Unity template on this computer) ignores folders named Build.
+!site/**/[Bb]uild/
+!site/**/[Bb]uild/**
