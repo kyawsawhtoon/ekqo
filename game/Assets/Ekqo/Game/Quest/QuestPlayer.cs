@@ -50,7 +50,8 @@ namespace Ekqo.Game
         private float _time;
 
         // Screen
-        private VisualElement _root, _ui, _bubble, _hearButton, _nextButton;
+        private VisualElement _root, _ui, _bubble, _hearButton, _nextButton, _hintButton;
+        private Func<IEnumerator> _hint;
         private PixelWorld _world;
         private PixelSprite _child;
         private BushView _bush;
@@ -301,55 +302,34 @@ namespace Ekqo.Game
             _child.SetSprite(still);
         }
 
-        // ---------- teaching: hear, show, echo ----------
+        // ---------- teaching: Ekqo shows each new word once ----------
+        // No drills: the child hears each word with its picture, then the story goes on and the
+        // words are used in the conversation, with the hint button when the child needs help.
 
         private IEnumerator Teach(TeachEvent e)
         {
             var outcomes = e.Concepts.ToDictionary(c => c, c => new WordOutcome { Concept = c, Heard = true });
 
-            // 1. Hear: each word with its picture.
             foreach (var c in e.Concepts)
             {
                 ClearUI();
                 var word = _text.Word(c);
                 _ui.Add(WordCard(c, word, _text.Gloss(c)));
-                SetInstruction("Listen to Ekqo", null);
+                SetInstruction("A new word from Ekqo", null);
                 yield return Speak("ekqo", $"word/{c}", word);
                 yield return English(_text.Gloss(c));
                 _hearAgain = () => Speak("ekqo", $"word/{c}", word);
                 yield return WaitNext();
             }
 
-            // 2. Show: listen and tap the right picture.
-            var show = e.Concepts.Where(c => !e.SkipShowEcho.Contains(c) && PictureView.Has(c)).ToList();
-            foreach (var c in show)
-            {
-                var choices = e.Concepts.Where(PictureView.Has).ToList();
-                if (choices.Count < 2) choices.AddRange(Distractors(c, 1));
-                yield return PickPicture(c, Shuffle(choices), "Which picture is it? Listen and tap.", _ => { });
-                outcomes[c].Tapped = true;
-            }
-
-            // 3. Echo: say it with Ekqo (optional, never checked).
-            foreach (var c in e.Concepts.Where(c => !e.SkipShowEcho.Contains(c)))
-            {
-                ClearUI();
-                var word = _text.Word(c);
-                _ui.Add(WordCard(c, word, _text.Gloss(c)));
-                SetInstruction("Say it with Ekqo!", "Saying it out loud is the goal. Tap the arrow when you're ready.");
-                yield return Speak("ekqo", $"word/{c}", word);
-                _hearAgain = () => Speak("ekqo", $"word/{c}", word);
-                yield return WaitNext();
-            }
-
-            // Sentence patterns: hear the whole sentence, then say it along.
+            // Sentence patterns: hear the whole sentence once.
             foreach (var p in e.Patterns)
             {
                 ClearUI();
                 var sentence = _text.Pattern(p);
                 var meaning = _text.PatternMeaning(p).Replace("___", _text.PlayerName);
                 _ui.Add(WordCard(PatternPicture(p), sentence, meaning));
-                SetInstruction("Say it with Ekqo!", "Use your own name.");
+                SetInstruction("A new way to say it", "Use your own name.");
                 yield return Speak("ekqo", null, sentence);
                 _hearAgain = () => Speak("ekqo", null, sentence);
                 yield return WaitNext();
@@ -387,8 +367,14 @@ namespace Ekqo.Game
             yield return Speak("ekqo", $"word/{target}", word);
             _hearAgain = () => Speak("ekqo", $"word/{target}", word);
             ShowHear(true);
-
             var firstTry = true;
+            ShowHint(() =>
+            {
+                firstTry = false;
+                cards[target].AddToClassList("card--glow");   // hint glow (Q1 ability)
+                return Speak("ekqo", $"word/{target}", word);
+            });
+
             while (true)
             {
                 picked = null;
@@ -417,6 +403,7 @@ namespace Ekqo.Game
 
         private string _lastAnswer;
         private string _lastAnswerConcept;
+        private bool _askedBefore;
 
         private IEnumerator Ask(AskEvent e)
         {
@@ -428,8 +415,11 @@ namespace Ekqo.Game
             {
                 yield return SayLine(step.Speaker, prompt.Text, prompt.Support, $"{_quest.Id}/{step.Id}");
             }
-            SetInstruction("Your turn! Say it out loud, then tap it.", LineText.CleanMeaning(step.Meaning));
-            yield return English("Your turn! Say it out loud, then tap it.");
+            // Answer Ekqo in your own words; the cards stand in for speech until the game can
+            // listen. The explanation is read out only once per play, so it doesn't repeat.
+            SetInstruction("Your turn! Answer Ekqo.", _askedBefore ? null : "Say your answer, then tap it. Stuck? Tap the light for a hint.");
+            if (!_askedBefore) yield return English("Your turn! Say your answer, then tap it. Stuck? Tap the light for a hint.");
+            _askedBefore = true;
 
             var options = Shuffle(_text.Options(_quest.Id, step));
             var sides = ChoiceColumns();
@@ -455,25 +445,38 @@ namespace Ekqo.Game
                 cards[o] = card;
             }
 
+            // Hint (Q1 ability hint_glow): Ekqo glows over the right answer and whispers it.
+            var hinted = false;
+            var rightOnes = options.Where(o => o.Correct).ToList();
+            ShowHint(() =>
+            {
+                hinted = true;
+                foreach (var r in rightOnes) cards[r].AddToClassList("card--glow");
+                _ekqo.TargetGlow = Mathf.Max(_ekqo.TargetGlow, 0.8f);
+                var first = rightOnes.FirstOrDefault();
+                return first == null ? null : Speak("ekqo", first.Concept != null ? $"word/{first.Concept}" : null, first.Text);
+            });
+
             while (true)
             {
                 picked = null;
                 while (picked == null) yield return null;
                 answer = picked;
-                // A right tap goes straight on: Ekqo says it back in the feedback (tap fallback, 4.2).
                 if (answer.Correct) break;
+                // A wrong tap gets the same help as the hint, gently.
                 cards[answer].AddToClassList("card--wrong");
-                var right = options.First(o => o.Correct);
-                cards[right].AddToClassList("card--glow");
-                ShowBubble(step.Speaker, right.Text, "Let's say it together!");
+                hinted = true;
+                foreach (var r in rightOnes) cards[r].AddToClassList("card--glow");
+                var right = rightOnes.First();
                 yield return Speak(step.Speaker, right.Concept != null ? $"word/{right.Concept}" : null, right.Text);
             }
+            ShowHint(null);
 
             cards[answer].AddToClassList("card--right");
             _lastAnswer = answer.Text;
             _lastAnswerConcept = answer.Concept;
             var matched = answer.Concept != null ? new List<string> { answer.Concept } : new List<string>();
-            _engine.Answer(new AnswerResult { Verdict = Verdict.Correct, Mode = AnswerMode.Tap, Matched = matched });
+            _engine.Answer(new AnswerResult { Verdict = Verdict.Correct, Mode = AnswerMode.Tap, Matched = matched, Hinted = hinted });
         }
 
         private IEnumerator Feedback(FeedbackEvent e)
@@ -486,16 +489,10 @@ namespace Ekqo.Game
                 Burst();
                 if (step?.OnSuccess?.Effect == "ekqo_glow_up") yield return Emerge();
             }
-            if (e.Recast && !string.IsNullOrEmpty(_lastAnswer))
-            {
-                // Ekqo says it back, so the child hears it once more ("Let's say it together").
-                yield return SayLine("ekqo", _lastAnswer, "Yes! Let's say it together.", _lastAnswerConcept != null ? $"word/{_lastAnswerConcept}" : null);
-            }
-            else
-            {
-                ShowBubble("ekqo", "", "Yes!");
-            }
-            yield return WaitNext();
+            // The child's answer stays in the dialogue box for a moment, like a real reply, and
+            // the conversation moves on by itself: no "say it together", no extra tap.
+            if (!string.IsNullOrEmpty(_lastAnswer)) ShowBubbleAs(_text.PlayerName, _lastAnswer, null);
+            yield return new WaitForSeconds(1.2f);
         }
 
         private IEnumerator Emerge()
@@ -641,6 +638,13 @@ namespace Ekqo.Game
             _hearButton = RoundButton(IconView.Kind.Speaker, "round--hear");
             _hearButton.RegisterCallback<ClickEvent>(_ => { if (_hearAgain != null) StartCoroutine(_hearAgain()); });
             _root.Add(_hearButton);
+            _hintButton = RoundButton(IconView.Kind.Hint, "round--hint");
+            _hintButton.RegisterCallback<ClickEvent>(_ =>
+            {
+                var help = _hint?.Invoke();
+                if (help != null) StartCoroutine(help);
+            });
+            _root.Add(_hintButton);
             _nextButton = RoundButton(IconView.Kind.Next, "round--next");
             _nextButton.RegisterCallback<ClickEvent>(_ => _nextPressed = true);
             _root.Add(_nextButton);
@@ -683,6 +687,7 @@ namespace Ekqo.Game
             _ui.Clear();
             _bubble.AddToClassList("hidden");
             ShowHear(false);
+            ShowHint(null);
             _nextButton.AddToClassList("hidden");
             _hearAgain = null;
         }
@@ -713,10 +718,12 @@ namespace Ekqo.Game
             return b;
         }
 
-        private void ShowBubble(string speaker, string text, string support)
+        private void ShowBubble(string speaker, string text, string support) =>
+            ShowBubbleAs(speaker != null ? _text.Name(speaker) : "", text, support);
+
+        private void ShowBubbleAs(string name, string text, string support)
         {
             _bubble.RemoveFromClassList("hidden");
-            var name = speaker != null ? _text.Name(speaker) : "";
             _bubbleSpeaker.SetText(name);
             _bubbleSpeaker.EnableInClassList("hidden", string.IsNullOrEmpty(name));
             _bubbleText.SetText(text);
@@ -743,6 +750,13 @@ namespace Ekqo.Game
         }
 
         private void ShowHear(bool on) => _hearButton.EnableInClassList("hidden", !on);
+
+        /// <summary>Shows the hint button (a light) while help is available; null hides it.</summary>
+        private void ShowHint(Func<IEnumerator> help)
+        {
+            _hint = help;
+            _hintButton.EnableInClassList("hidden", help == null);
+        }
 
         /// <summary>What to do now, for the child, plus an English hint for the grown-up.</summary>
         private void SetInstruction(string forChild, string hint)
