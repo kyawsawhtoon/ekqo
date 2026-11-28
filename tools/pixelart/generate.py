@@ -709,6 +709,21 @@ def pic_jar():
     return a
 
 
+def icon_hint():
+    """The hint button: a light bulb (Ekqo's hint glow)."""
+    a = card()
+    a.ellipse(16, 13, 9, 9, "y")
+    a.rect(12, 19, 19, 23, "y")
+    a.shade("y", "Y", "F", 2)
+    a.rect(12, 24, 19, 25, "A"); a.rect(13, 26, 18, 27, "a"); a.rect(14, 28, 17, 28, "A")
+    a.rect(15, 14, 16, 22, "Y"); a.set(14, 14, "Y"); a.set(17, 14, "Y")
+    a.outline("k")
+    for x0, y0, x1, y1 in ((3, 6, 5, 7), (27, 6, 29, 7), (2, 14, 4, 14), (28, 14, 30, 14)):
+        a.line(x0, y0, x1, y1, "Y")
+    return a
+
+
+sprite("icon_hint", icon_hint())
 sprite("pic_hello", pic_hello())
 sprite("pic_yes", pic_yes())
 sprite("pic_no", pic_no())

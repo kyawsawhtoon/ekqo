@@ -57,6 +57,8 @@ namespace Ekqo.Core.Engine
         public Verdict Verdict;
         public AnswerMode Mode;
         public List<string> Matched = new List<string>();
+        /// <summary>The child used the hint (or got help after a wrong tap) before answering.</summary>
+        public bool Hinted;
     }
 
     /// <summary>What happened to one word during teaching or review.</summary>

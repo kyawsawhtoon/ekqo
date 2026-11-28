@@ -389,7 +389,7 @@ namespace Ekqo.Game
     /// <summary>Small icons for buttons and reward cards.</summary>
     internal sealed class IconView : VisualElement
     {
-        public enum Kind { Next, Speaker, WordBook, Jar, Page }
+        public enum Kind { Next, Speaker, WordBook, Jar, Page, Hint }
         private readonly Kind _kind;
         public Color Ink = new Color(0.16f, 0.12f, 0.24f);
         public float Glow;
@@ -398,7 +398,8 @@ namespace Ekqo.Game
         {
             _kind = kind;
             pickingMode = PickingMode.Ignore;
-            var sprite = kind == Kind.WordBook ? "book" : kind == Kind.Jar ? "jar" : kind == Kind.Page ? "page" : null;
+            var sprite = kind == Kind.WordBook ? "book" : kind == Kind.Jar ? "jar" : kind == Kind.Page ? "page"
+                : kind == Kind.Hint ? "icon_hint" : null;
             if (sprite != null && PixelArt.Has(sprite))
             {
                 PixelArt.Show(this, sprite);
